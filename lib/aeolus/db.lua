@@ -4,7 +4,6 @@
 local DB = {}
 
 
-DB.ENV = require('aeolus/env')
 DB.Table = require('aeolus/db/table')
 DB.Driver = require('aeolus/db/driver')
 
