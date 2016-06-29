@@ -1,17 +1,17 @@
 
-local accel = {}
+local Accel = {}
 
 
-accel.ID = 63
+Accel.ID = 63
 
-accel.NAME = 'accel'
+Accel.NAME = 'accel'
 
 
-function accel:read(data_array)
+function Accel:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return accel
+return Accel

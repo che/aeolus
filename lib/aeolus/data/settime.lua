@@ -1,17 +1,17 @@
 
-local settime = {}
+local SetTime = {}
 
 
-settime.ID = 12
+SetTime.ID = 12
 
-settime.NAME = 'settime'
+SetTime.NAME = 'settime'
 
 
-function settime:read(data_array)
+function SetTime:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return settime
+return SetTime

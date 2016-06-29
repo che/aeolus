@@ -1,17 +1,17 @@
 
-local gyro = {}
+local Gyro = {}
 
 
-gyro.ID = 62
+Gyro.ID = 62
 
-gyro.NAME = 'gyro'
+Gyro.NAME = 'gyro'
 
 
-function gyro:read(data_array)
+function Gyro:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return gyro
+return Gyro

@@ -1,10 +1,10 @@
 
 -- MySQL
 
-local mysql = {}
+local MySQL = {}
 
 
-local _mysql = require('luasql.mysql').mysql()
+local _MySQL = require('luasql.mysql').mysql()
 
 
-return mysql
+return MySQL

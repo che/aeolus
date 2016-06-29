@@ -1,17 +1,17 @@
 
-local compass = {}
+local Compass = {}
 
 
-compass.ID = 72
+Compass.ID = 72
 
-compass.NAME = 'compass'
+Compass.NAME = 'compass'
 
 
-function compass:read(data_array)
+function Compass:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return compass
+return Compass

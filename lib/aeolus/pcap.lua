@@ -1,13 +1,13 @@
 
-local aeolus = require('aeolus')
+local Aeolus = require('aeolus')
 
---print(aeolus.db.driver.NAME)
 
---print(aeolus.db.driver.obj.DB_DIR)
+--Aeolus.DB:create()
+Aeolus.DB:connect()
 
---aeolus.db:create()
-aeolus.db:connect()
-aeolus.db.table.emmiter:table_create()
+if not Aeolus.DB.Table.Emmiter:table_exists() then
+    Aeolus.DB.Table.Emmiter:table_create()
+end
 
 local pcap_handle = io.popen(os.getenv('AEOLUS_PCAP_COMMAND'))
 local pcap_data = ''
@@ -25,22 +25,30 @@ while pcap_data do
         end
 
         if #values == 10 then
-            aeolus.db.table.emmiter:insert(values)
+            if not Aeolus.DB.Table.Emmiter:exists(values[2]) then
+                Aeolus.DB.Table.Emmiter:insert(values)
+            end
 
-            local data_type, data_table, message_error = aeolus.data:parse(values[10])
+            local data_type, data_table, message_error = Aeolus.Data:parse(values[10])
 
-            aeolus.db.table.data:table_create(values[2], data_type)
---            aeolus.db.table.data:table_delete(values[2], data_type)
+            if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
+                Aeolus.DB.Table.Data:table_create(values[2], data_type)
+            end
+--            if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
+--                Aeolus.DB.Table.Data:table_delete(values[2], data_type)
+--            end
 
---!!            if aeolus.db.table.data:exists(values[2], data_type) then
-                aeolus.db.table.data:insert(values[2], data_type, data_table)
---                aeolus.db.table.data:delete(values[2], data_type, data_table)
---!!            end
+--            Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
+--            Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
         end
     end
 end
 
-pcap_handle:close()
-aeolus.db:close()
+--if Aeolus.DB.Table.Emmiter:table_exists() then
+--    Aeolus.DB.Table.Emmiter:table_delete()
+--end
 
---aeolus.db:delete()
+pcap_handle:close()
+Aeolus.DB:close()
+
+--Aeolus.DB:delete()

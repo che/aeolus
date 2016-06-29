@@ -1,19 +1,17 @@
 
-local command = {}
+local Command = {}
 
 
-command.ID = 11
-
-command.NAME = 'command'
+Command.NAME = 'command'
 
 
-function command:insert(driver_obj, table_name, data_table)
+function Command:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function command:delete(driver_obj, table_name, data_table)
+function Command:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return command
+return Command

@@ -1,17 +1,17 @@
 
-local pressure = {}
+local Pressure = {}
 
 
-pressure.ID = 61
+Pressure.ID = 61
 
-pressure.NAME = 'pressure'
+Pressure.NAME = 'pressure'
 
 
-function pressure:read(data_array)
+function Pressure:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return pressure
+return Pressure

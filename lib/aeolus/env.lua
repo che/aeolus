@@ -1,8 +1,8 @@
 
-local env = {}
+local ENV = {}
 
 
-function env.dirname(str)
+function ENV.dirname(str)
     if str:match('.-/.-') then
         return string.gsub(str, '(.*/)(.*)', '%1')
     else
@@ -11,16 +11,16 @@ function env.dirname(str)
 end
 
 local function setdir(sub_dir)
-    return string.format("%s%s", env.PROJECT_DIR, sub_dir)
+    return string.format("%s%s", ENV.PROJECT_DIR, sub_dir)
 end
 
 
-env.PROJECT_DIR = string.format("%s../../", env.dirname(arg[0]))
+ENV.PROJECT_DIR = string.format("%s../../", ENV.dirname(arg[0]))
 
-env.BIN_DIR = os.getenv('AEOLUS_BIN_DIR') or setdir('bin')
-env.ETC_DIR = os.getenv('AEOLUS_ETC_DIR') or setdir('etc')
-env.LIB_DIR = os.getenv('AEOLUS_LIB_DIR') or setdir('lib')
-env.VAR_DIR = os.getenv('AEOLUS_VAR_DIR') or setdir('var')
+ENV.BIN_DIR = os.getenv('AEOLUS_BIN_DIR') or setdir('bin')
+ENV.ETC_DIR = os.getenv('AEOLUS_ETC_DIR') or setdir('etc')
+ENV.LIB_DIR = os.getenv('AEOLUS_LIB_DIR') or setdir('lib')
+ENV.VAR_DIR = os.getenv('AEOLUS_VAR_DIR') or setdir('var')
 
 
-return env
+return ENV

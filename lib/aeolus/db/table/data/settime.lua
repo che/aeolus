@@ -1,19 +1,17 @@
 
-local settime = {}
+local SetTime = {}
 
 
-settime.ID = 12
-
-settime.NAME = 'settime'
+SetTime.NAME = 'settime'
 
 
-function settime:insert(driver_obj, table_name, data_table)
+function SetTime:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function settime:delete(driver_obj, table_name, data_table)
+function SetTime:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return settime
+return SetTime

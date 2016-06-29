@@ -1,19 +1,17 @@
 
-local calibinfo = {}
+local CalibInfo = {}
 
 
-calibinfo.ID = 75
-
-calibinfo.NAME = 'calibinfo'
+CalibInfo.NAME = 'calibinfo'
 
 
-function calibinfo:insert(driver_obj, table_name, data_table)
+function CalibInfo:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function calibinfo:delete(driver_obj, table_name, data_table)
+function CalibInfo:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return calibinfo
+return CalibInfo

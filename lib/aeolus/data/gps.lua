@@ -1,17 +1,17 @@
 
-local gps = {}
+local GPS = {}
 
 
-gps.ID = 66
+GPS.ID = 66
 
-gps.NAME = 'gps'
+GPS.NAME = 'gps'
 
 
-function gps:read(data_array)
+function GPS:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return gps
+return GPS

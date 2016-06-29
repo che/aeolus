@@ -1,5 +1,5 @@
 
-local mock = {}
+local Mock = {}
 
 
-return mock
+return Mock

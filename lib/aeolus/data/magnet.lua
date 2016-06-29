@@ -1,17 +1,17 @@
 
-local magnet = {}
+local Magnet = {}
 
 
-magnet.ID = 64
+Magnet.ID = 64
 
-magnet.NAME = 'magnet'
+Magnet.NAME = 'magnet'
 
 
-function magnet:read(data_array)
+function Magnet:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return magnet
+return Magnet

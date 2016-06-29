@@ -1,19 +1,17 @@
 
-local compass = {}
+local Compass = {}
 
 
-compass.ID = 72
-
-compass.NAME = 'compass'
+Compass.NAME = 'compass'
 
 
-function compass:insert(driver_obj, table_name, data_table)
+function Compass:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function compass:delete(driver_obj, table_name, data_table)
+function Compass:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return compass
+return Compass

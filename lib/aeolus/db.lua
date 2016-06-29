@@ -1,74 +1,87 @@
 
 -- Aelous database
 
-local db = {}
+local DB = {}
 
 
-db.env = require('aeolus/env')
-db.table = require('aeolus/db/table')
-db.driver = require('aeolus/db/driver')
+DB.ENV = require('aeolus/env')
+DB.Table = require('aeolus/db/table')
+DB.Driver = require('aeolus/db/driver')
 
 
-function db:create()
-    db.driver.obj.db:create()
+function DB:create()
+    DB.Driver.Object.DB:create()
 end
 
-function db:delete()
-    db.driver.obj.db:delete()
+function DB:delete()
+    DB.Driver.Object.DB:delete()
 end
 
-function db:connect()
-    return db.driver.obj.db:connect()
+function DB:connect()
+    return DB.Driver.Object.DB:connect()
 end
 
-function db:close()
-    db.driver.obj.db:close()
-end
-
-
-db.table.emmiter = {}
-
-db.table.emmiter.NAME = db.table._emmiter.NAME
-
-
-function db.table.emmiter:table_create()
-    return db.table._emmiter:table_create(db.driver.obj)
-end
-
-function db.table.emmiter:insert(values)
-    return db.table._emmiter:insert(db.driver.obj, values)
-end
-
-function db.table.emmiter:delete(source_mac)
-    return db.table._emmiter:delete(db.driver.obj, source_mac)
-end
-
-function db.table.emmiter:table_delete()
-    return db.table._emmiter:table_delete(db.driver.obj)
+function DB:close()
+    DB.Driver.Object.DB:close()
 end
 
 
-db.table.data = {}
+DB.Table.Emmiter = {}
 
-function db.table.data:table_create(source_mac, data_type)
-    return db.table._data:table_create(db.driver.obj, source_mac, data_type)
+DB.Table.Emmiter.NAME = DB.Table._Emmiter.NAME
+
+
+function DB.Table.Emmiter:table_exists()
+    return DB.Table._Emmiter:table_exists()
 end
 
-function db.table.data:insert(source_mac, data_type, data_table)
-    return db.table._data:insert(db.driver.obj, source_mac, data_type, data_table)
+function DB.Table.Emmiter:exists(source_mac)
+    return DB.Table._Emmiter:exists(source_mac)
 end
 
-function db.table.data:delete(source_mac, data_type, data_table)
-    return db.table._data:delete(db.driver.obj, source_mac, data_type, data_table)
+function DB.Table.Emmiter:table_create()
+    return DB.Table._Emmiter:table_create(DB.Driver.Object)
 end
 
-function db.table.data:table_delete(source_mac, data_type)
-    return db.table._data:table_delete(db.driver.obj, source_mac, data_type)
+function DB.Table.Emmiter:insert(values)
+    return DB.Table._Emmiter:insert(DB.Driver.Object, values)
 end
 
-function db.table.data:table_name(source_mac, data_type)
-    return db.table._data:table_name(source_mac, data_type)
+function DB.Table.Emmiter:delete(source_mac)
+    return DB.Table._Emmiter:delete(DB.Driver.Object, source_mac)
+end
+
+function DB.Table.Emmiter:table_delete()
+    return DB.Table._Emmiter:table_delete(DB.Driver.Object)
 end
 
 
-return db
+DB.Table.Data = {}
+
+
+function DB.Table.Data:table_exists(source_mac, data_type)
+    return DB.Table._Data:table_exists(source_mac, data_type)
+end
+
+function DB.Table.Data:table_create(source_mac, data_type)
+    return DB.Table._Data:table_create(DB.Driver.Object, source_mac, data_type)
+end
+
+function DB.Table.Data:insert(source_mac, data_type, data_table)
+    return DB.Table._Data:insert(DB.Driver.Object, source_mac, data_type, data_table)
+end
+
+function DB.Table.Data:delete(source_mac, data_type, data_table)
+    return DB.Table._Data:delete(DB.Driver.Object, source_mac, data_type, data_table)
+end
+
+function DB.Table.Data:table_delete(source_mac, data_type)
+    return DB.Table._Data:table_delete(DB.Driver.Object, source_mac, data_type)
+end
+
+function DB.Table.Data:table_name(source_mac, data_type)
+    return DB.Table._Data:table_name(source_mac, data_type)
+end
+
+
+return DB

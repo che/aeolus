@@ -1,17 +1,17 @@
 
-local attitude = {}
+local Attitude = {}
 
 
-attitude.ID = 71
+Attitude.ID = 71
 
-attitude.NAME = 'attitude'
+Attitude.NAME = 'attitude'
 
 
-function attitude:read(data_array)
+function Attitude:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return attitude
+return Attitude

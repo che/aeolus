@@ -1,17 +1,17 @@
 
-local aeolusinfo = {}
+local AeolusInfo = {}
 
 
-aeolusinfo.ID = 51
+AeolusInfo.ID = 51
 
-aeolusinfo.NAME = 'aeolusinfo'
+AeolusInfo.NAME = 'aeolusinfo'
 
 
-function aeolusinfo:read(data_array)
+function AeolusInfo:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return aeolusinfo
+return AeolusInfo

@@ -1,29 +1,29 @@
 
 -- SQLite
 
-local sqlite = {}
+local SQLite = {}
 
 
-local _sqlite = require('luasql.sqlite3').sqlite3()
+local _SQLite = require('luasql.sqlite3').sqlite3()
 
-local env = require('aeolus/env')
+local ENV = require('aeolus/env')
 
-sqlite.DEFAULT_DB_NAME = 'aelous'
-sqlite.DB_NAME = os.getenv('AEOLUS_DB_NAME') or sqlite.DEFAULT_DB_NAME
+SQLite.DEFAULT_DB_NAME = 'aelous'
+SQLite.DB_NAME = os.getenv('AEOLUS_DB_NAME') or SQLite.DEFAULT_DB_NAME
 
-local DB_FILE = string.format("%s.db", sqlite.DB_NAME)
+local DB_FILE = string.format("%s.db", SQLite.DB_NAME)
 
-sqlite.DEFAULT_DB_DIR = env.VAR_DIR
-sqlite.DB_DIR = string.format("%s/", os.getenv('AEOLUS_DB_DIR') or sqlite.DEFAULT_DB_DIR)
+SQLite.DEFAULT_DB_DIR = ENV.VAR_DIR
+SQLite.DB_DIR = string.format("%s/", os.getenv('AEOLUS_DB_DIR') or SQLite.DEFAULT_DB_DIR)
 
-local DB_PATH = string.format("%s%s", sqlite.DB_DIR, DB_FILE)
+local DB_PATH = string.format("%s%s", SQLite.DB_DIR, DB_FILE)
+
+local connection = nil
 
 
-sqlite.db = {}
+SQLite.DB = {}
 
-sqlite.db.connection = nil
-
-sqlite.db.NAME = sqlite.DB_NAME
+SQLite.DB.NAME = SQLite.DB_NAME
 
 
 local function file_exists(path)
@@ -38,7 +38,7 @@ local function file_exists(path)
     end
 end
 
-function sqlite.db:create()
+function SQLite.DB:create()
     if file_exists(DB_PATH) then
         print('ERROR: DB already exists!')
         os.exit(1)
@@ -48,7 +48,7 @@ function sqlite.db:create()
     end
 end
 
-function sqlite.db:delete()
+function SQLite.DB:delete()
     if file_exists(DB_PATH) then
         os.remove(DB_PATH)
     else
@@ -57,21 +57,21 @@ function sqlite.db:delete()
     end
 end
 
-function sqlite.db:connect()
-    sqlite.db.connection = _sqlite:connect(DB_PATH)
+function SQLite.DB:connect()
+    connection = _SQLite:connect(DB_PATH)
 
-    return sqlite.db.connection
+    return connection
 end
 
-function sqlite.db:close()
-  sqlite.db.connection:close()
-  _sqlite:close()
-end
-
-
-function sqlite:execute(sql)
-  return sqlite.db.connection:execute(sql)
+function SQLite.DB:close()
+    connection:close()
+    _SQLite:close()
 end
 
 
-return sqlite
+function SQLite:execute(sql)
+    return connection:execute(sql)
+end
+
+
+return SQLite

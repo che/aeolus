@@ -1,19 +1,17 @@
 
-local accel = {}
+local Accel = {}
 
 
-accel.ID = 63
-
-accel.NAME = 'accel'
+Accel.NAME = 'accel'
 
 
-function accel:insert(driver_obj, table_name, data_table)
+function Accel:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function accel:delete(driver_obj, table_name, data_table)
+function Accel:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return accel
+return Accel

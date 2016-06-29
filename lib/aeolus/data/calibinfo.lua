@@ -1,17 +1,17 @@
 
-local calibinfo = {}
+local CalibInfo = {}
 
 
-calibinfo.ID = 75
+CalibInfo.ID = 75
 
-calibinfo.NAME = 'calibinfo'
+CalibInfo.NAME = 'calibinfo'
 
 
-function calibinfo:read(data_array)
+function CalibInfo:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return calibinfo
+return CalibInfo

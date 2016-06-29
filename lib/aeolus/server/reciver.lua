@@ -1,5 +1,5 @@
 
-local reciver = {}
+local Reciver = {}
 
 
-return reciver
+return Reciver

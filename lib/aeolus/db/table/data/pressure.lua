@@ -1,19 +1,17 @@
 
-local pressure = {}
+local Pressure = {}
 
 
-pressure.ID = 61
-
-pressure.NAME = 'pressure'
+Pressure.NAME = 'pressure'
 
 
-function pressure:insert(driver_obj, table_name, data_table)
+function Pressure:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function pressure:delete(driver_obj, table_name, data_table)
+function Pressure:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return pressure
+return Pressure

@@ -1,5 +1,5 @@
 
-local emmiter = {}
+local Emmiter = {}
 
 
-return emmiter
+return Emmiter

@@ -1,19 +1,17 @@
 
-local log = {}
+local Log = {}
 
 
-log.ID = 81
-
-log.NAME = 'log'
+Log.NAME = 'log'
 
 
-function log:insert(driver_obj, table_name, data_table)
+function Log:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function log:delete(driver_obj, table_name, data_table)
+function Log:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return log
+return Log

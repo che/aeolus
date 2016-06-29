@@ -1,19 +1,17 @@
 
-local gps = {}
+local GPS = {}
 
 
-gps.ID = 66
-
-gps.NAME = 'gps'
+GPS.NAME = 'gps'
 
 
-function gps:insert(driver_obj, table_name, data_table)
+function GPS:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function gps:delete(driver_obj, table_name, data_table)
+function GPS:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return gps
+return GPS

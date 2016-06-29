@@ -1,17 +1,17 @@
 
-local wind = {}
+local Wind = {}
 
 
-wind.ID = 73
+Wind.ID = 73
 
-wind.NAME = 'wind'
+Wind.NAME = 'wind'
 
 
-function wind:read(data_array)
+function Wind:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return wind
+return Wind

@@ -1,17 +1,17 @@
 
-local toast = {}
+local Toast = {}
 
 
-toast.ID = 82
+Toast.ID = 82
 
-toast.NAME = 'toast'
+Toast.NAME = 'toast'
 
 
-function toast:read(data_array)
+function Toast:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return toast
+return Toast

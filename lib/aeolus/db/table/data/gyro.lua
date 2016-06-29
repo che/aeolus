@@ -1,19 +1,17 @@
 
-local gyro = {}
+local Gyro = {}
 
 
-gyro.ID = 62
-
-gyro.NAME = 'gyro'
+Gyro.NAME = 'gyro'
 
 
-function gyro:insert(driver_obj, table_name, data_table)
+function Gyro:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function gyro:delete(driver_obj, table_name, data_table)
+function Gyro:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return gyro
+return Gyro

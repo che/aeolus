@@ -1,19 +1,17 @@
 
-local magnet = {}
+local Magnet = {}
 
 
-magnet.ID = 64
-
-magnet.NAME = 'magnet'
+Magnet.NAME = 'magnet'
 
 
-function magnet:insert(driver_obj, table_name, data_table)
+function Magnet:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function magnet:delete(driver_obj, table_name, data_table)
+function Magnet:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return magnet
+return Magnet

@@ -1,19 +1,17 @@
 
-local wind = {}
+local Wind = {}
 
 
-wind.ID = 73
-
-wind.NAME = 'wind'
+Wind.NAME = 'wind'
 
 
-function wind:insert(driver_obj, table_name, data_table)
+function Wind:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function wind:delete(driver_obj, table_name, data_table)
+function Wind:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return wind
+return Wind

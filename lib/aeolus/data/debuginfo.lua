@@ -1,17 +1,17 @@
 
-local debuginfo = {}
+local DebugInfo = {}
 
 
-debuginfo.ID = 76
+DebugInfo.ID = 76
 
-debuginfo.NAME = 'debuginfo'
+DebugInfo.NAME = 'debuginfo'
 
 
-function debuginfo:read(data_array)
+function DebugInfo:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return debuginfo
+return DebugInfo

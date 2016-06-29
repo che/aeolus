@@ -1,11 +1,9 @@
 
-local table_main = table
-
-local table = {}
+local Table = {}
 
 
-table._emmiter = require('aeolus/db/table/emmiter')
-table._data = require('aeolus/db/table/data')
+Table._Emmiter = require('aeolus/db/table/emmiter')
+Table._Data = require('aeolus/db/table/data')
 
 
-return table
+return Table

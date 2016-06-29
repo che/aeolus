@@ -1,11 +1,11 @@
 
-local aeolus = {}
+local Aeolus = {}
 
 
-aeolus.data = require('aeolus/data')
-aeolus.env = require('aeolus/env')
-aeolus.db = require('aeolus/db')
-aeolus.server = require('aeolus/server')
+Aeolus.Data = require('aeolus/data')
+Aeolus.ENV = require('aeolus/env')
+Aeolus.DB = require('aeolus/db')
+Aeolus.Server = require('aeolus/server')
 
 
-return aeolus
+return Aeolus

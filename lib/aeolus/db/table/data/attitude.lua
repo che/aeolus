@@ -1,19 +1,17 @@
 
-local attitude = {}
+local Attitude = {}
 
 
-attitude.ID = 71
-
-attitude.NAME = 'attitude'
+Attitude.NAME = 'attitude'
 
 
-function attitude:insert(driver_obj, table_name, data_table)
+function Attitude:insert(driver_obj, table_name, data_table)
     return nil
 end
 
-function attitude:delete(driver_obj, table_name, data_table)
+function Attitude:delete(driver_obj, table_name, data_table)
     return nil
 end
 
 
-return attitude
+return Attitude

@@ -1,17 +1,17 @@
 
-local temp = {}
+local Temp = {}
 
 
-temp.ID = 65
+Temp.ID = 65
 
-temp.NAME = 'temp'
+Temp.NAME = 'temp'
 
 
-function temp:read(data_array)
+function Temp:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return temp
+return Temp

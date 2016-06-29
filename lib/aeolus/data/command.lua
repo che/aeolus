@@ -1,17 +1,17 @@
 
-local command = {}
+local Command = {}
 
 
-command.ID = 11
+Command.ID = 11
 
-command.NAME = 'command'
+Command.NAME = 'command'
 
 
-function command:read(data_array)
+function Command:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return command
+return Command

@@ -1,10 +1,10 @@
 
 -- PostgreSQL
 
-local postgesql = {}
+local PostgeSQL = {}
 
 
-local _postgesql = require('luasql.postgres').postgres()
+local _PostgeSQL = require('luasql.postgres').postgres()
 
 
-return postgesql
+return PostgeSQL

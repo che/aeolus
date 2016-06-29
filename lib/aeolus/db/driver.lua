@@ -1,12 +1,12 @@
 
-local driver = {}
+local Driver = {}
 
 
-driver.DEFAULT_NAME = 'sqlite'
+Driver.DEFAULT_NAME = 'sqlite'
 
-driver.NAME = os.getenv('AEOLUS_DB_DRIVER') or driver.DEFAULT_NAME
+Driver.NAME = os.getenv('AEOLUS_DB_DRIVER') or Driver.DEFAULT_NAME
 
-driver.obj = require(string.format('aeolus/db/driver/%s', driver.NAME))
+Driver.Object = require(string.format('aeolus/db/driver/%s', Driver.NAME))
 
 
-return driver
+return Driver

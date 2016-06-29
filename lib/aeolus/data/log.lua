@@ -1,17 +1,17 @@
 
-local log = {}
+local Log = {}
 
 
-log.ID = 81
+Log.ID = 81
 
-log.NAME = 'log'
+Log.NAME = 'log'
 
 
-function log:read(data_array)
+function Log:read(data_array)
     local data = {}
 
     return data
 end
 
 
-return log
+return Log
