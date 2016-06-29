@@ -10,7 +10,7 @@ local emmiter_cache = {}
 local table_exists = false
 
 local SQL_TABLE_CREATE = [[
-    CREATE TABLE IF NOT EXISTS emmiter (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    CREATE TABLE IF NOT EXISTS emmiter (
         protocol VARCHAR(3) NOT NULL,
         source_mac VARCHAR(17) NOT NULL,
         source_ipv4 VARCHAR(15) NOT NULL,
@@ -20,7 +20,7 @@ local SQL_TABLE_CREATE = [[
         destination_port INTEGER NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        UNIQUE(source_mac));
+        UNIQUE (source_mac));
 ]]
 
 local SQL_INSERT = [[

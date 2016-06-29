@@ -28,9 +28,8 @@ local data_cache_type = 'table'
 
 
 local SQL_TABLE_CREATE = [[
-    CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        message_id INTEGER NOT NULL,
-        crc VARCHAR(4) NOT NULL,
+    CREATE TABLE IF NOT EXISTS %s (
+%s        crc VARCHAR(4) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);
 ]]
 
@@ -80,6 +79,10 @@ local function data_cache_delete(source_mac, data_type)
     end
 end
 
+local function sql_create_table(data_type, table_name)
+    return string.format(SQL_TABLE_CREATE, table_name, Data.map[data_type]:sql_table_structure())
+end
+
 
 function Data:table_exists(source_mac, data_type)
     for mac, list_data in pairs(data_cache) do
@@ -97,7 +100,7 @@ end
 
 function Data:table_create(driver_obj, source_mac, data_type)
     local table_name = self:table_name(source_mac, data_type)
-    local status, error_message = driver_obj:execute(string.format(SQL_TABLE_CREATE, table_name))
+    local status, error_message = driver_obj:execute(sql_create_table(data_type, table_name))
 
     if not nil == error_message then
         return false

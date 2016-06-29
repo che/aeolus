@@ -5,6 +5,15 @@ local Command = {}
 Command.NAME = 'command'
 
 
+local SQL_TABLE_STRUCTURE = [[
+        message VARCHAR(256),
+]]
+
+
+function Command:sql_table_structure()
+    return SQL_TABLE_STRUCTURE
+end
+
 function Command:insert(driver_obj, table_name, data_table)
     return nil
 end
