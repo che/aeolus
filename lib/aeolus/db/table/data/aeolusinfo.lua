@@ -25,4 +25,4 @@ function AeolusInfo:delete(driver_obj, table_name, data_table)
 end
 
 
-return Aeolusinfo
+return AeolusInfo

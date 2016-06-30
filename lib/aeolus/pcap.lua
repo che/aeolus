@@ -1,54 +1,89 @@
 
+local PCAP = {}
+
+
 local Aeolus = require('aeolus')
 
+local pcap_handle = nil
 
---Aeolus.DB:create()
-Aeolus.DB:connect()
 
-if not Aeolus.DB.Table.Emmiter:table_exists() then
-    Aeolus.DB.Table.Emmiter:table_create()
-end
+function PCAP:init()
+    pcap_handle = io.popen(os.getenv('AEOLUS_PCAP_COMMAND'))
 
-local pcap_handle = io.popen(os.getenv('AEOLUS_PCAP_COMMAND'))
-local pcap_data = ''
+--    Aeolus.DB:create()
+    Aeolus.DB:connect()
+
+    if not Aeolus.DB.Table.Emmiter:table_exists() then
+        Aeolus.DB.Table.Emmiter:table_create()
+    end
+
+--require('pack')
+
 
 --print(os.date('%Y-%m-%d %H:%M:%S', 1466686980.668728000))
 --os.exit()
+end
 
-while pcap_data do
-    local values = {}
-    pcap_data = pcap_handle:read('*line')
+function PCAP:read()
+    local pcap_data = ''
 
-    if pcap_data then
-        for i in string.gmatch(string.gsub(pcap_data, '\t', ' '), '%S+') do
-            values[#values + 1] = i
+    while pcap_data do
+        local values = {}
+
+        pcap_data = pcap_handle:read('*line')
+
+        if pcap_data then
+            for i in string.gmatch(string.gsub(pcap_data, '\t', ' '), '%S+') do
+                values[#values + 1] = i
+            end
+
+            if #values == 10 then
+                if not Aeolus.DB.Table.Emmiter:exists(values[2]) then
+                    Aeolus.DB.Table.Emmiter:insert(values)
+                end
+
+                self:parse(values)
+            end
         end
+    end
+end
 
-        if #values == 10 then
-            if not Aeolus.DB.Table.Emmiter:exists(values[2]) then
-                Aeolus.DB.Table.Emmiter:insert(values)
-            end
+function PCAP:parse(values)
 
-            local data_type, data_table, message_error = Aeolus.Data:parse(values[10])
+print(values[10])
+    local data, error_message = Aeolus.Data:parse(values[10])
 
-            if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
-                Aeolus.DB.Table.Data:table_create(values[2], data_type)
-            end
+    for data_type, data_table in pairs(data) do
+        print(data_type)
+
+        if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
+            Aeolus.DB.Table.Data:table_create(values[2], data_type)
+        end
+    end
+--os.exit()
 --            if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
 --                Aeolus.DB.Table.Data:table_delete(values[2], data_type)
 --            end
 
 --            Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
 --            Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
-        end
-    end
+
 end
 
---if Aeolus.DB.Table.Emmiter:table_exists() then
---    Aeolus.DB.Table.Emmiter:table_delete()
---end
+function PCAP:close()
+--    if Aeolus.DB.Table.Emmiter:table_exists() then
+--        Aeolus.DB.Table.Emmiter:table_delete()
+--    end
 
-pcap_handle:close()
-Aeolus.DB:close()
+    pcap_handle:close()
+    Aeolus.DB:close()
 
---Aeolus.DB:delete()
+--    Aeolus.DB:delete()
+end
+
+
+PCAP:init()
+
+PCAP:read()
+
+PCAP:close()

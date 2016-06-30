@@ -27,6 +27,9 @@ local function id_data_crc(array)
     local id = nil
     local crc = nil
 
+    table.remove(array, #array)
+    table.remove(array, 1)
+
     id = tonumber(array[1], 16)
     table.remove(array, 1)
 
@@ -45,8 +48,7 @@ local function array(hex_data)
     end
 
     if array[1] == Data.BLOCK_KEY and array[1] == array[#array] then
-        table.remove(array, #array)
-        table.remove(array, 1)
+        hex_data = nil
     else
         array = nil
     end
@@ -54,28 +56,46 @@ local function array(hex_data)
     return array
 end
 
-function Data:parse(hex_data)
-    local message_error = nil
-    local data_name = nil
-    local data_table = {}
-    local id, crc
-
-    local array = array(hex_data)
-
-    if array == nil then
-        return nil, nil, 'ERROR: Invalid HEX data'
-    else
-        id, array, crc = id_data_crc(array)
-
-        data_name = self.map[id].NAME
-
-        data_table.message_id = id
-        data_table.crc = crc
-
-        self.map[id]:read(array)
+local function array_read_by_block(array)
+    if not array[1] == Data.BLOCK_KEY and not array[#array] == Data.BLOCK_KEY then
+        return nil, nil
     end
 
-    return data_name, data_table, message_error
+    local data_block = {}
+
+    for i = 1, #array do
+        data_block[#data_block + 1] = table.remove(array, 1)
+
+        if #data_block > 1 and data_block[#data_block] == Data.BLOCK_KEY then
+            if #array == 0 then
+                array = nil
+            end
+
+            return data_block, array
+        end
+    end
+end
+
+
+function Data:parse(hex_data)
+    local array = array(hex_data)
+    local data = {}
+    local next_array = {}
+    local id, crc
+
+    if array == nil then
+        return nil, 'ERROR: Invalid HEX data'
+    else
+        while next_array do
+            current_array, next_array = array_read_by_block(array)
+
+            id, current_array, crc = id_data_crc(current_array)
+print(id)
+            data[self.map[id].NAME] = self.map[id]:read(current_array)
+        end
+    end
+
+    return data, nil
 end
 
 
