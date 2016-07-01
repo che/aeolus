@@ -25,8 +25,6 @@ Data.map[73] = require('aeolus/data/wind')
 
 local function _read_by_block(data_str)
     local sep_pos = string.find(data_str, Data.BLOCK_KEY .. Data.BLOCK_KEY)
---print(data_str)
---print(sep_pos)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     if sep_pos == nil then
         return data_str, nil
