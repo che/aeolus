@@ -3,52 +3,37 @@ local Pressure = {}
 
 
 Pressure.ID = 61
-
+Pressure.SIZE = 32
 Pressure.NAME = 'pressure'
 
 
-local struc_string = '%s%s'
-
-
-function Pressure:read(data_array)
+function Pressure:read(hex_data)
     local data = {}
 
+print(self.NAME)
+print(hex_data)
+
     -- Data valid
-    data.data_valid = tonumber(data_array[1], 16)
-    for i = 1, 8 do
-        table.remove(data_array, 1)
-    end
+    data.data_valid = string.sub(hex_data, 1, 2)
 print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = ''
-    for i = 1, 8 do
-        data.timestamp = string.format(struc_string, data.timestamp, table.remove(data_array, 1))
-    end
+    data.timestamp = string.sub(hex_data, 17, 32)
 print(data.timestamp)
 
     -- Static pressure
-    data.static_pressure = ''
-    for i = 1, 4 do
-        data.static_pressure = string.format(struc_string, data.static_pressure, table.remove(data_array, 1))
-    end
+    data.static_pressure = string.sub(hex_data, 33, 40)
 print(data.static_pressure)
 
     -- Pilot pressure
-    data.pilot_pressure = ''
-    for i = 1, 4 do
-        data.pilot_pressure = string.format(struc_string, data.pilot_pressure, table.remove(data_array, 1))
-    end
+    data.pilot_pressure = string.sub(hex_data, 41, 48)
 print(data.pilot_pressure)
 
     -- Airspeed
-    data.airspeed = ''
-    for i = 1, 4 do
-        data.airspeed = string.format(struc_string, data.airspeed, table.remove(data_array, 1))
-    end
+    data.airspeed = string.sub(hex_data, 49, 56)
 print(data.airspeed)
 
-    data_array = nil
+    hex_data = nil
 
     return data
 end

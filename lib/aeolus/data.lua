@@ -23,75 +23,65 @@ Data.map[82] = require('aeolus/data/toast')
 Data.map[73] = require('aeolus/data/wind')
 
 
-local function id_data_crc(array)
-    local id = nil
-    local crc = nil
-
-    table.remove(array, #array)
-    table.remove(array, 1)
-
-    id = tonumber(array[1], 16)
-    table.remove(array, 1)
-
-    crc = tonumber(string.format("%s%s", array[#array - 1], array[#array]), 16)
-    table.remove(array, #array)
-    table.remove(array, #array)
-
-    return id, array, crc
-end
-
-local function array(hex_data)
-    local array = {}
-
-    for value in string.gmatch(hex_data, '([^:]+)') do
-        array[#array + 1] = value
-    end
-
-    if array[1] == Data.BLOCK_KEY and array[1] == array[#array] then
-        hex_data = nil
+local function _read_by_block(data_str)
+    local sep_pos = string.find(data_str, Data.BLOCK_KEY .. Data.BLOCK_KEY)
+--print(data_str)
+--print(sep_pos)
+print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    if sep_pos == nil then
+        return data_str, nil
     else
-        array = nil
-    end
-
-    return array
-end
-
-local function array_read_by_block(array)
-    if not array[1] == Data.BLOCK_KEY and not array[#array] == Data.BLOCK_KEY then
-        return nil, nil
-    end
-
-    local data_block = {}
-
-    for i = 1, #array do
-        data_block[#data_block + 1] = table.remove(array, 1)
-
-        if #data_block > 1 and data_block[#data_block] == Data.BLOCK_KEY then
-            if #array == 0 then
-                array = nil
-            end
-
-            return data_block, array
-        end
+        return string.sub(data_str, 1, sep_pos + 1), string.sub(data_str, sep_pos + 2, #data_str)
     end
 end
 
+local function _data_id(hex_data)
+    return tonumber(string.sub(hex_data, 3, 4), 16)
+end
 
-function Data:parse(hex_data)
-    local array = array(hex_data)
+local function _data(hex_data)
+    return string.sub(hex_data, 5, #hex_data - 6)
+end
+
+local function _data_crc(hex_data)
+    return tonumber(string.sub(hex_data, #hex_data - 5, #hex_data - 2), 16)
+end
+
+
+function Data:check(hex_data)
+    local last_block_key = string.sub(hex_data, #hex_data - 1, #hex_data)
+    local first_block_key = string.sub(hex_data, 1, 2)
+
+    if first_block_key == Data.BLOCK_KEY and first_block_key == last_block_key then
+        hex_data = string.gsub(hex_data, ':', '')
+    else
+        hex_data = nil
+    end
+
+    return hex_data
+end
+
+function Data:parse(next_data)
+    next_data = self:check(next_data)
+
+    if next_data == nil then
+        return nil, 'ERROR: Invalid HEX data'
+    end
+
     local data = {}
-    local next_array = {}
+    local current_data = nil
     local id, crc
 
-    if array == nil then
-        return nil, 'ERROR: Invalid HEX data'
-    else
-        while next_array do
-            current_array, next_array = array_read_by_block(array)
+    while next_data do
+        current_data, next_data = _read_by_block(next_data)
 
-            id, current_array, crc = id_data_crc(current_array)
-print(id)
-            data[self.map[id].NAME] = self.map[id]:read(current_array)
+        id = _data_id(current_data)
+
+        if self.map[id] == nil then
+            print('ERROR: Invalid data ID')
+        else
+            data[self.map[id].NAME] = self.map[id]:read(_data(current_data))
+            data[self.map[id].NAME].crc = _data_crc(current_data)
         end
     end
 

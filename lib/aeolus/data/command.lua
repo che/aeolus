@@ -3,7 +3,7 @@ local Command = {}
 
 
 Command.ID = 11
-
+Command.SIZE = 256
 Command.NAME = 'command'
 
 

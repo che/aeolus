@@ -3,7 +3,7 @@ local Wind = {}
 
 
 Wind.ID = 73
-
+Wind.SIZE = 32
 Wind.NAME = 'wind'
 
 

@@ -3,7 +3,7 @@ local Attitude = {}
 
 
 Attitude.ID = 71
-
+Attitude.SIZE = 52
 Attitude.NAME = 'attitude'
 
 

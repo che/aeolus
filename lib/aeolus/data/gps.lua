@@ -3,7 +3,7 @@ local GPS = {}
 
 
 GPS.ID = 66
-
+GPS.SIZE = 32
 GPS.NAME = 'gps'
 
 

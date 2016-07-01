@@ -3,7 +3,7 @@ local CalibInfo = {}
 
 
 CalibInfo.ID = 75
-
+CalibInfo.SIZE = 32
 CalibInfo.NAME = 'calibinfo'
 
 

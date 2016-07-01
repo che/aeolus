@@ -3,7 +3,7 @@ local AeolusInfo = {}
 
 
 AeolusInfo.ID = 51
-
+AeolusInfo.SIZE = 32
 AeolusInfo.NAME = 'aeolusinfo'
 
 

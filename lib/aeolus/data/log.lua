@@ -3,7 +3,7 @@ local Log = {}
 
 
 Log.ID = 81
-
+Log.SIZE = 256
 Log.NAME = 'log'
 
 

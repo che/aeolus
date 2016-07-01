@@ -3,7 +3,7 @@ local Compass = {}
 
 
 Compass.ID = 72
-
+Compass.SIZE = 80
 Compass.NAME = 'compass'
 
 

@@ -3,7 +3,7 @@ local Toast = {}
 
 
 Toast.ID = 82
-
+Toast.SIZE = 256
 Toast.NAME = 'toast'
 
 
