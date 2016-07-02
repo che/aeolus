@@ -3,6 +3,7 @@ local Data = {}
 
 
 Data.BLOCK_KEY = '7e'
+Data.XOR_KEY = '7d'
 
 Data.map = {}
 Data.map[63] = require('aeolus/data/accel')
@@ -23,35 +24,43 @@ Data.map[82] = require('aeolus/data/toast')
 Data.map[73] = require('aeolus/data/wind')
 
 
-local function _read_by_block(data_str)
-    local sep_pos = string.find(data_str, Data.BLOCK_KEY .. Data.BLOCK_KEY)
-print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    if sep_pos == nil then
-        return data_str, nil
-    else
-        return string.sub(data_str, 1, sep_pos + 1), string.sub(data_str, sep_pos + 2, #data_str)
-    end
-end
-
 local function _data_id(hex_data)
-    return tonumber(string.sub(hex_data, 3, 4), 16)
+    return tonumber(hex_data:sub(3, 4), 16)
 end
 
 local function _data(hex_data)
-    return string.sub(hex_data, 5, #hex_data - 6)
+    return hex_data:sub(5, #hex_data - 6)
 end
 
 local function _data_crc(hex_data)
-    return tonumber(string.sub(hex_data, #hex_data - 5, #hex_data - 2), 16)
+    return tonumber(hex_data:sub(#hex_data - 5, #hex_data - 2), 16)
+end
+
+local function _read_by_block(data_str)
+    local id = _data_id(data_str)
+
+    if Data.map[id] == nil then
+        return id, nil, 'ERROR: Invalid data ID'
+    end
+
+    if data_str:sub(Data.map[id].SIZE + 9, Data.map[id].SIZE + 10) == Data.BLOCK_KEY then
+        if #data_str > Data.map[id].SIZE + 12 then
+            return id, data_str:sub(1, Data.map[id].SIZE + 10), data_str:sub(Data.map[id].SIZE + 11, #data_str)
+        else
+            return id, data_str, nil
+        end
+    else
+        return id, nil, 'ERROR: Invalid data block size'
+    end
 end
 
 
 function Data:check(hex_data)
-    local last_block_key = string.sub(hex_data, #hex_data - 1, #hex_data)
-    local first_block_key = string.sub(hex_data, 1, 2)
+    local last_block_key = hex_data:sub(#hex_data - 1, #hex_data)
+    local first_block_key = hex_data:sub(1, 2)
 
     if first_block_key == Data.BLOCK_KEY and first_block_key == last_block_key then
-        hex_data = string.gsub(hex_data, ':', '')
+        hex_data = hex_data:gsub(Data.XOR_KEY, ''):gsub(':', '')
     else
         hex_data = nil
     end
@@ -71,16 +80,16 @@ function Data:parse(next_data)
     local id, crc
 
     while next_data do
-        current_data, next_data = _read_by_block(next_data)
+        id, current_data, next_data = _read_by_block(next_data)
 
-        id = _data_id(current_data)
-
-        if self.map[id] == nil then
-            print('ERROR: Invalid data ID')
-        else
-            data[self.map[id].NAME] = self.map[id]:read(_data(current_data))
-            data[self.map[id].NAME].crc = _data_crc(current_data)
+        if current_data == nil then
+            return current_data, next_data
         end
+        crc = _data_crc(current_data)
+
+        current_data = _data(current_data)
+
+        data[self.map[id].NAME] = self.map[id]:read(current_data)
     end
 
     return data, nil

@@ -3,11 +3,11 @@ local Toast = {}
 
 
 Toast.ID = 82
-Toast.SIZE = 256
+Toast.SIZE = 256 * 2
 Toast.NAME = 'toast'
 
 
-function Toast:read(data_array)
+function Toast:read(hex_data)
     local data = {}
 
     return data

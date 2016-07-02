@@ -6,8 +6,9 @@ AeolusInfo.NAME = 'aeolusinfo'
 
 
 local SQL_TABLE_STRUCTURE = [[
-        aeolus_model INTEGER NOT NULL,
-        firmware_version VARCHAR(10) NOT NULL,
+        model_id INTEGER(2) NOT NULL,
+        model_name VARCHAR(12) NOT NULL,
+        firmware_version VARCHAR(8) NOT NULL,
         mac_address VARCHAR(17) NOT NULL,
 ]]
 

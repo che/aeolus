@@ -3,11 +3,11 @@ local DebugInfo = {}
 
 
 DebugInfo.ID = 76
-DebugInfo.SIZE = 208
+DebugInfo.SIZE = 208 * 2
 DebugInfo.NAME = 'debuginfo'
 
 
-function DebugInfo:read(data_array)
+function DebugInfo:read(hex_data)
     local data = {}
 
     return data

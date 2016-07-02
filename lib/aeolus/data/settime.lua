@@ -3,11 +3,11 @@ local SetTime = {}
 
 
 SetTime.ID = 12
-SetTime.SIZE = 32
+SetTime.SIZE = 32 * 2
 SetTime.NAME = 'settime'
 
 
-function SetTime:read(data_array)
+function SetTime:write(hex_data)
     local data = {}
 
     return data

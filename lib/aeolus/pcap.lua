@@ -33,7 +33,7 @@ function PCAP:read()
         pcap_data = pcap_handle:read('*line')
 
         if pcap_data then
-            for i in string.gmatch(string.gsub(pcap_data, '\t', ' '), '%S+') do
+            for i in string.gmatch(pcap_data:gsub('\t', ' '), '%S+') do
                 values[#values + 1] = i
             end
 
@@ -49,10 +49,8 @@ function PCAP:read()
 end
 
 function PCAP:parse(values)
-print(values[10])
---    values[10] = Aeolus.Data:check(values[10])
---print(values[10])
 
+print(values[10])
 
     local data, error_message = Aeolus.Data:parse(values[10])
 
@@ -65,7 +63,7 @@ print(data)
             Aeolus.DB.Table.Data:table_create(values[2], data_type)
         end
     end
-os.exit()
+--os.exit()
 --            if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
 --                Aeolus.DB.Table.Data:table_delete(values[2], data_type)
 --            end

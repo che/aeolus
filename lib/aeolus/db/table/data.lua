@@ -26,11 +26,11 @@ Data.map['wind'] = require('aeolus/db/table/data/wind')
 local data_cache = {}
 local data_cache_type = 'table'
 
+local TABLE_NAME = '%s%s_%s'
 
 local SQL_TABLE_CREATE = [[
     CREATE TABLE IF NOT EXISTS %s (
-%s        crc VARCHAR(4) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);
+%s        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);
 ]]
 
 local SQL_TABLE_DELETE = [[
@@ -80,7 +80,7 @@ local function _data_cache_delete(source_mac, data_type)
 end
 
 local function _sql_create_table(data_type, table_name)
-    return string.format(SQL_TABLE_CREATE, table_name, Data.map[data_type]:sql_table_structure())
+    return SQL_TABLE_CREATE:format(table_name, Data.map[data_type]:sql_table_structure())
 end
 
 
@@ -125,7 +125,7 @@ end
 
 function Data:table_delete(driver_obj, source_mac, data_type)
     local table_name = self:table_name(source_mac, data_type)
-    local status, error_message = driver_obj:execute(string.format(SQL_TABLE_DELETE, table_name))
+    local status, error_message = driver_obj:execute(SQL_TABLE_DELETE:format(table_name))
 
     if not nil == error_message then
         return false
@@ -137,7 +137,7 @@ function Data:table_delete(driver_obj, source_mac, data_type)
 end
 
 function Data:table_name(source_mac, data_type)
-    return string.format('%s%s_%s', self.NAME, string.gsub(source_mac, ':', ''), data_type)
+    return TABLE_NAME:format(self.NAME, source_mac:gsub(':', ''), data_type)
 end
 
 
