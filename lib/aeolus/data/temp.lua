@@ -7,24 +7,17 @@ Temp.SIZE = 32 * 2
 Temp.NAME = 'temp'
 
 
-function Temp:read(hex_data)
+function Temp:read(hex_data, data_cls)
     local data = {}
-
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
 
     -- Data valid
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
-print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = hex_data:sub(17, 32)
-print(data.timestamp)
+    data.timestamp = data_cls:double(hex_data:sub(17, 32))
 
     -- Temperature
-    data.temperature = hex_data:sub(33, 40)
-print(data.temperature)
+    data.temperature = data_cls:float(hex_data:sub(33, 40))
 
     hex_data = nil
 

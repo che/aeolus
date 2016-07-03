@@ -24,6 +24,63 @@ Data.map[82] = require('aeolus/data/toast')
 Data.map[73] = require('aeolus/data/wind')
 
 
+local _EMPTY_STR = ''
+
+local _str_double = 'd'
+local _str_float = 'f'
+
+
+if string.pack == nil and string.unpack == nil then
+    require('pack')
+
+
+    local _str_ulong = 'L'
+
+
+    function Data:double(hex_str)
+        local _double = nil
+        local _i = nil
+
+        if hex_str then
+            _i, _double = string.unpack(string.pack(_str_ulong, tonumber(hex_str, 16)), _str_double)
+        end
+
+        return _double
+    end
+
+    function Data:float(hex_str)
+        local _float = nil
+        local _i = nil
+
+        if hex_str then
+            _i, _float = string.unpack(string.pack(_str_ulong, tonumber(hex_str, 16)), _str_float)
+        end
+
+        return _float
+    end
+else
+    local _str_uint8 = 'I8'
+    local _str_uint4 = 'I4'
+
+
+    function Data:double(hex_str)
+        if hex_str == nil then
+            return nil
+        else
+            return string.unpack(string.pack(_str_uint8, tonumber(hex_str, 16)), _str_double)
+        end
+    end
+
+    function Data:float(hex_str)
+        if hex_str == nil then
+            return nil
+        else
+            return string.unpack(string.pack(_str_uint4, tonumber(hex_str, 16)), _str_float)
+        end
+    end
+end
+
+
 local function _data_id(hex_data)
     return tonumber(hex_data:sub(3, 4), 16)
 end
@@ -60,7 +117,7 @@ function Data:check(hex_data)
     local first_block_key = hex_data:sub(1, 2)
 
     if first_block_key == Data.BLOCK_KEY and first_block_key == last_block_key then
-        hex_data = hex_data:gsub(Data.XOR_KEY, ''):gsub(':', '')
+        hex_data = hex_data:gsub(Data.XOR_KEY, _EMPTY_STR):gsub(':', _EMPTY_STR)
     else
         hex_data = nil
     end
@@ -89,7 +146,7 @@ function Data:parse(next_data)
 
         current_data = _data(current_data)
 
-        data[self.map[id].NAME] = self.map[id]:read(current_data)
+        data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
     end
 
     return data, nil

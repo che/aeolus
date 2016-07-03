@@ -7,32 +7,23 @@ Pressure.SIZE = 32 * 2
 Pressure.NAME = 'pressure'
 
 
-function Pressure:read(hex_data)
+function Pressure:read(hex_data, data_cls)
     local data = {}
-
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
 
     -- Data valid
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
-print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = hex_data:sub(17, 32)
-print(data.timestamp)
+    data.timestamp = data_cls:double(hex_data:sub(17, 32))
 
     -- Static pressure
-    data.static_pressure = hex_data:sub(33, 40)
-print(data.static_pressure)
+    data.static_pressure = data_cls:float(hex_data:sub(33, 40))
 
     -- Pilot pressure
-    data.pilot_pressure = hex_data:sub(41, 48)
-print(data.pilot_pressure)
+    data.pilot_pressure = data_cls:float(hex_data:sub(41, 48))
 
     -- Airspeed
-    data.airspeed = hex_data:sub(49, 56)
-print(data.airspeed)
+    data.airspeed = data_cls:float(hex_data:sub(49, 56))
 
     hex_data = nil
 

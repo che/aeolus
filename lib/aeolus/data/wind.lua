@@ -7,28 +7,20 @@ Wind.SIZE = 32 * 2
 Wind.NAME = 'wind'
 
 
-function Wind:read(hex_data)
+function Wind:read(hex_data, data_cls)
     local data = {}
-
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
 
     -- Data valid
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
-print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = hex_data:sub(17, 32)
-print(data.timestamp)
+    data.timestamp = data_cls:double(hex_data:sub(17, 32))
 
     -- Wind magnitude
-    data.wind_magnitude = hex_data:sub(33, 40)
-print(data.wind_magnitude)
+    data.wind_magnitude = data_cls:float(hex_data:sub(33, 40))
 
     -- Wind direction
-    data.wind_direction = hex_data:sub(41, 48)
-print(data.wind_direction)
+    data.wind_direction = data_cls:float(hex_data:sub(41, 48))
 
     hex_data = nil
 

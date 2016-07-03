@@ -5,13 +5,13 @@ local CalibInfo = {}
 CalibInfo.NAME = 'calibinfo'
 
 
-local SQL_TABLE_STRUCTURE = [[
-        message VARCHAR(256),
+local _SQL_TABLE_STRUCTURE = [[
+        message VARCHAR(256)
 ]]
 
 
 function CalibInfo:sql_table_structure()
-    return SQL_TABLE_STRUCTURE
+    return _SQL_TABLE_STRUCTURE
 end
 
 function CalibInfo:insert(driver_obj, table_name, data_table)

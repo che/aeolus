@@ -7,32 +7,23 @@ Magnet.SIZE = 32 * 2
 Magnet.NAME = 'magnet'
 
 
-function Magnet:read(hex_data)
+function Magnet:read(hex_data, data_cls)
     local data = {}
-
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
 
     -- Data valid
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
-print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = hex_data:sub(17, 32)
-print(data.timestamp)
+    data.timestamp = data_cls:double(hex_data:sub(17, 32))
 
     -- Magnetometer X
-    data.magnetometer_x = hex_data:sub(33, 40)
-print(data.magnetometer_x)
+    data.magnetometer_x = data_cls:float(hex_data:sub(33, 40))
 
     -- Magnetometer Y
-    data.magnetometer_y = hex_data:sub(41, 48)
-print(data.magnetometer_y)
+    data.magnetometer_y = data_cls:float(hex_data:sub(41, 48))
 
     -- Magnetometer Z
-    data.magnetometer_z = hex_data:sub(49, 56)
-print(data.magnetometer_z)
+    data.magnetometer_z = data_cls:float(hex_data:sub(49, 56))
 
     hex_data = nil
 

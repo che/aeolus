@@ -5,7 +5,7 @@ local Compass = {}
 Compass.NAME = 'compass'
 
 
-local SQL_TABLE_STRUCTURE = [[
+local _SQL_TABLE_STRUCTURE = [[
         data_valid INTEGER(1) NOT NULL,
         calibration_status VARCHAR(2) NOT NULL,
         has_value INTEGER(1) NOT NULL,
@@ -24,12 +24,12 @@ local SQL_TABLE_STRUCTURE = [[
         hard_iron_calibration_6 FLOAT(16) NOT NULL,
         hard_iron_calibration_7 FLOAT(16) NOT NULL,
         hard_iron_calibration_8 FLOAT(16) NOT NULL,
-        hard_iron_calibration_9 FLOAT(16) NOT NULL,
+        hard_iron_calibration_9 FLOAT(16) NOT NULL
 ]]
 
 
 function Compass:sql_table_structure()
-    return SQL_TABLE_STRUCTURE
+    return _SQL_TABLE_STRUCTURE
 end
 
 function Compass:insert(driver_obj, table_name, data_table)

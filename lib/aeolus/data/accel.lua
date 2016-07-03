@@ -7,32 +7,23 @@ Accel.SIZE = 40 * 2
 Accel.NAME = 'accel'
 
 
-function Accel:read(hex_data)
+function Accel:read(hex_data, data_cls)
     local data = {}
-
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
 
     -- Data valid
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
-print(data.data_valid)
 
     -- Timestamp
-    data.timestamp = hex_data:sub(17, 32)
-print(data.timestamp)
+    data.timestamp = data_cls:double(hex_data:sub(17, 32))
 
     -- Accelerometer X
-    data.accelerometer_x = hex_data:sub(33, 40)
-print(data.accelerometer_x)
+    data.accelerometer_x = data_cls:float(hex_data:sub(33, 40))
 
     -- Accelerometer Y
-    data.accelerometer_y = hex_data:sub(41, 48)
-print(data.accelerometer_y)
+    data.accelerometer_y = data_cls:float(hex_data:sub(41, 48))
 
     -- Accelerometer Z
-    data.accelerometer_z = hex_data:sub(49, 56)
-print(data.accelerometer_z)
+    data.accelerometer_z = data_cls:float(hex_data:sub(49, 56))
 
     hex_data = nil
 

@@ -10,19 +10,14 @@ CalibInfo.NAME = 'calibinfo'
 function CalibInfo:read(hex_data)
     local data = {}
 
-print(self.NAME)
-print(#hex_data)
-print(hex_data)
-
     --TODO: new datasheet
     -- Message
---    if hex_data == nil then
+    if hex_data == nil then
         data.message = nil
---    else
+    else
         --TODO: new datasheet
---        data.message = tonumber(hex_data:sub(1, self.SIZE), 16)
---    end
-print(data.message)
+        data.message = tonumber(hex_data:sub(1, self.SIZE), 16)
+    end
 
     hex_data = nil
 

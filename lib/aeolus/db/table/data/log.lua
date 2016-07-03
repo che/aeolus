@@ -5,13 +5,13 @@ local Log = {}
 Log.NAME = 'log'
 
 
-local SQL_TABLE_STRUCTURE = [[
-        message VARCHAR(256),
+local _SQL_TABLE_STRUCTURE = [[
+        message VARCHAR(256)
 ]]
 
 
 function Log:sql_table_structure()
-    return SQL_TABLE_STRUCTURE
+    return _SQL_TABLE_STRUCTURE
 end
 
 function Log:insert(driver_obj, table_name, data_table)

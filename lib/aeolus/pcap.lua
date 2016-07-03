@@ -17,9 +17,6 @@ function PCAP:init()
         Aeolus.DB.Table.Emmiter:table_create()
     end
 
---require('pack')
-
-
 --print(os.date('%Y-%m-%d %H:%M:%S', 1466686980.668728000))
 --os.exit()
 end
@@ -50,27 +47,26 @@ end
 
 function PCAP:parse(values)
 
-print(values[10])
+--print(values[10])
 
     local data, error_message = Aeolus.Data:parse(values[10])
 
-print(data)
+--print(data)
 
     for data_type, data_table in pairs(data) do
-        print(data_type)
+--        print(data_type)
 
         if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
             Aeolus.DB.Table.Data:table_create(values[2], data_type)
         end
-    end
 --os.exit()
 --            if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
 --                Aeolus.DB.Table.Data:table_delete(values[2], data_type)
 --            end
 
---            Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
+            Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
 --            Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
-
+    end
 end
 
 function PCAP:close()
