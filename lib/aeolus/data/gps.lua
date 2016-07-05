@@ -20,7 +20,7 @@ function GPS:read(hex_data, data_cls)
     data.number_of_satellites = tonumber(hex_data:sub(5, 6), 16)
 
     -- Timestamp
-    data.timestamp = data_cls:double(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
 
     -- Latitude
     data.latitude = data_cls:float(hex_data:sub(33, 40))
@@ -34,8 +34,8 @@ function GPS:read(hex_data, data_cls)
     -- Ground speed
     data.ground_speed = data_cls:float(hex_data:sub(57, 64))
 
-    -- Something else
-    data.something_else = data_cls:float(hex_data:sub(65, 72))
+    -- Bearing
+    data.bearing = data_cls:float(hex_data:sub(65, 72))
 
     hex_data = nil
 

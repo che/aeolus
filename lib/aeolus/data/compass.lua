@@ -39,7 +39,7 @@ function Compass:read(hex_data, data_cls)
     data.calibration_per_remaining_time = tonumber(hex_data:sub(9, 10), 16)
 
     -- Timestamp
-    data.timestamp = data_cls:double(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
 
     -- Compass heading
     data.compass_heading = data_cls:float(hex_data:sub(33, 40))

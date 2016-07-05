@@ -1,5 +1,5 @@
 
-LUA_BIN_FILE="${LUA_BIN_FILE:=lua}"
+LUA_BIN_FILE="${LUA_BIN_FILE:=luajit}"
 
 AELOUS_BIN_DIR="${AELOUS_BIN_DIR:=$(realpath "$(readlink -f "$(dirname "$0")")")}/"
 AELOUS_ETC_PCAP_ENV_FILE="${AELOUS_ETC_PCAP_ENV_FILE:=${AELOUS_BIN_DIR}../etc/db-env.sh}"
@@ -10,4 +10,4 @@ AELOUS_ETC_DB_ENV_FILE="${AELOUS_ETC_DB_ENV_FILE:=${AELOUS_BIN_DIR}../etc/pcap-e
 . "$AELOUS_ETC_DB_ENV_FILE"
 
 cd "${AELOUS_BIN_DIR}../lib"
-"$LUA_BIN_FILE" "${AELOUS_BIN_DIR}../lib/aeolus/pcap.lua"
+"$LUA_BIN_FILE" "${AELOUS_BIN_DIR}aeolus-pcap-parse.lua"

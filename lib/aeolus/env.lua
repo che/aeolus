@@ -15,7 +15,7 @@ local function _setdir(sub_dir)
 end
 
 
-ENV.PROJECT_DIR = ('%s../../'):format(ENV.dirname(arg[0]))
+ENV.PROJECT_DIR = ('%s../'):format(ENV.dirname(arg[0]))
 
 ENV.BIN_DIR = os.getenv('AEOLUS_BIN_DIR') or _setdir('bin')
 ENV.ETC_DIR = os.getenv('AEOLUS_ETC_DIR') or _setdir('etc')

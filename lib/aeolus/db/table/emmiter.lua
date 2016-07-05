@@ -14,12 +14,11 @@ local _SQL_TABLE_CREATE = [[
         protocol VARCHAR(3) NOT NULL,
         source_mac VARCHAR(17) NOT NULL,
         source_ipv4 VARCHAR(15) NOT NULL,
-        source_port INTEGER NOT NULL,
+        source_port INTEGER(5) NOT NULL,
         destination_mac VARCHAR(17) NOT NULL,
         destination_ipv4 VARCHAR(15) NOT NULL,
-        destination_port INTEGER NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        destination_port INTEGER(5) NOT NULL,
+        created_at FLOAT(8) NOT NULL,
         UNIQUE (source_mac));
 ]]
 
@@ -30,8 +29,9 @@ local _SQL_INSERT = [[
                         source_port,
                         destination_mac,
                         destination_ipv4,
-                        destination_port)
-                VALUES('%s', '%s', '%s', '%d', '%s', '%s', '%d')
+                        destination_port,
+                        created_at)
+                VALUES ('%s', '%s', '%s', '%d', '%s', '%s', '%d', '%.8f')
 ]]
 
 local _SQL_SELECT = [[
@@ -46,7 +46,7 @@ local _SQL_TABLE_DELETE = [[
     DROP TABLE IF EXISTS emmiter;
 ]]
 
-local _str_key_all = 'a'
+local _STR_KEY_ALL = 'a'
 
 
 function Emmiter:exists(source_mac)
@@ -71,7 +71,7 @@ function Emmiter:exists_in_table(driver_obj, source_mac)
         return false
     end
 
-    if cursor:fetch({}, _str_key_all) == nil then
+    if cursor:fetch({}, _STR_KEY_ALL) == nil then
         cursor:close()
         return false
     else
@@ -96,14 +96,15 @@ end
 
 function Emmiter:insert(driver_obj, values)
     if not self:exists_in_table(driver_obj, values[2]) then
-        local status, error_message = driver_obj:execute(_SQL_INSERT,
+        local status, error_message = driver_obj:execute(_SQL_INSERT:format(
                                                         values[1],
                                                         values[2],
                                                         values[3],
                                                         values[4],
                                                         values[5],
                                                         values[6],
-                                                        values[7])
+                                                        values[7],
+                                                        os.time()))
 --        print(status, error_message)
 
         if not nil == error_message then

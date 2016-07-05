@@ -14,7 +14,7 @@ function Wind:read(hex_data, data_cls)
     data.data_valid = tonumber(hex_data:sub(1, 2), 16)
 
     -- Timestamp
-    data.timestamp = data_cls:double(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
 
     -- Wind magnitude
     data.wind_magnitude = data_cls:float(hex_data:sub(33, 40))

@@ -24,61 +24,12 @@ Data.map[82] = require('aeolus/data/toast')
 Data.map[73] = require('aeolus/data/wind')
 
 
-local _EMPTY_STR = ''
+local _STR_EMPTY = ''
+local _STR_2DOTS = ':'
+local _STR = '%s%s'
 
-local _str_double = 'd'
-local _str_float = 'f'
-
-
-if string.pack == nil and string.unpack == nil then
-    require('pack')
-
-
-    local _str_ulong = 'L'
-
-
-    function Data:double(hex_str)
-        local _double = nil
-        local _i = nil
-
-        if hex_str then
-            _i, _double = string.unpack(string.pack(_str_ulong, tonumber(hex_str, 16)), _str_double)
-        end
-
-        return _double
-    end
-
-    function Data:float(hex_str)
-        local _float = nil
-        local _i = nil
-
-        if hex_str then
-            _i, _float = string.unpack(string.pack(_str_ulong, tonumber(hex_str, 16)), _str_float)
-        end
-
-        return _float
-    end
-else
-    local _str_uint8 = 'I8'
-    local _str_uint4 = 'I4'
-
-
-    function Data:double(hex_str)
-        if hex_str == nil then
-            return nil
-        else
-            return string.unpack(string.pack(_str_uint8, tonumber(hex_str, 16)), _str_double)
-        end
-    end
-
-    function Data:float(hex_str)
-        if hex_str == nil then
-            return nil
-        else
-            return string.unpack(string.pack(_str_uint4, tonumber(hex_str, 16)), _str_float)
-        end
-    end
-end
+local _STR_DOUBLE = 'd'
+local _STR_FLOAT = 'f'
 
 
 local function _data_id(hex_data)
@@ -92,6 +43,68 @@ end
 local function _data_crc(hex_data)
     return tonumber(hex_data:sub(#hex_data - 5, #hex_data - 2), 16)
 end
+
+local function _reverse_bytes(hex_str)
+        local str = _STR_EMPTY
+
+        for i = 1, #hex_str / 2 do
+            str = string.format(_STR, hex_str:sub(i * 2 - 1, i * 2), str)
+        end
+
+    return str
+end
+
+
+if string.pack == nil and string.unpack == nil then
+    require('pack')
+
+
+    local _STR_ULONG = 'L'
+
+
+    function Data:timestamp(hex_str)
+        local ts = nil
+        local i = nil
+
+        if hex_str then
+            i, ts = string.unpack(string.pack(_STR_ULONG, tonumber(hex_str, 16)), _STR_DOUBLE)
+        end
+
+        return ts
+    end
+
+    function Data:float(hex_str)
+        local f = nil
+        local i = nil
+
+        if hex_str then
+            i, f = string.unpack(string.pack(_STR_ULONG, tonumber(_reverse_bytes(hex_str), 16)), _STR_FLOAT)
+        end
+
+        return f
+    end
+else
+    local _STR_UINT8 = 'I8'
+    local _STR_UINT4 = 'I4'
+
+
+    function Data:timestamp(hex_str)
+        if hex_str == nil then
+            return nil
+        else
+            return string.unpack(string.pack(_STR_UINT8, tonumber(hex_str, 16)), _STR_DOUBLE)
+        end
+    end
+
+    function Data:float(hex_str)
+        if hex_str == nil then
+            return nil
+        else
+            return string.unpack(string.pack(_STR_UINT, tonumber(_reverse_bytes(hex_str), 16)), _STR_FLOAT)
+        end
+    end
+end
+
 
 local function _read_by_block(data_str)
     local id = _data_id(data_str)
@@ -117,7 +130,7 @@ function Data:check(hex_data)
     local first_block_key = hex_data:sub(1, 2)
 
     if first_block_key == Data.BLOCK_KEY and first_block_key == last_block_key then
-        hex_data = hex_data:gsub(Data.XOR_KEY, _EMPTY_STR):gsub(':', _EMPTY_STR)
+        hex_data = hex_data:gsub(Data.XOR_KEY, _STR_EMPTY):gsub(_STR_2DOTS, _STR_EMPTY)
     else
         hex_data = nil
     end

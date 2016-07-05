@@ -59,13 +59,12 @@ function PCAP:parse(values)
         if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
             Aeolus.DB.Table.Data:table_create(values[2], data_type)
         end
---os.exit()
---            if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
---                Aeolus.DB.Table.Data:table_delete(values[2], data_type)
---            end
+--        if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
+--            Aeolus.DB.Table.Data:table_delete(values[2], data_type)
+--        end
 
-            Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
---            Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
+        Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
+--        Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
     end
 end
 
@@ -81,8 +80,4 @@ function PCAP:close()
 end
 
 
-PCAP:init()
-
-PCAP:read()
-
-PCAP:close()
+return PCAP
