@@ -67,7 +67,7 @@ if string.pack == nil and string.unpack == nil then
         local i = nil
 
         if hex_str then
-            i, ts = string.unpack(string.pack(_STR_ULONG, tonumber(hex_str, 16)), _STR_DOUBLE)
+            i, ts = string.unpack(string.pack(_STR_ULONG, tonumber(_reverse_bytes(hex_str), 16)), _STR_DOUBLE)
         end
 
         return ts
@@ -155,6 +155,7 @@ function Data:parse(next_data)
         if current_data == nil then
             return current_data, next_data
         end
+
         crc = _data_crc(current_data)
 
         current_data = _data(current_data)
