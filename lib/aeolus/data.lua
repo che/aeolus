@@ -92,7 +92,7 @@ else
         if hex_str == nil then
             return nil
         else
-            return string.unpack(string.pack(_STR_UINT8, tonumber(hex_str, 16)), _STR_DOUBLE)
+            return string.unpack(string.pack(_STR_UINT8, tonumber(_reverse_bytes(hex_str), 16)), _STR_DOUBLE)
         end
     end
 
