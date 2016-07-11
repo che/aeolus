@@ -3,41 +3,41 @@ local GPS = {}
 
 
 GPS.ID = 66
-GPS.SIZE = 36 * 2
+GPS.SIZE = 36
 GPS.NAME = 'gps'
 
 
-function GPS:read(hex_data, data_cls)
+function GPS:read(byte_data, data_cls)
     local data = {}
 
     -- Data valid
-    data.data_valid = tonumber(hex_data:sub(1, 2), 16)
+    data.data_valid = byte_data:byte(1)
 
     -- Has fix
-    data.has_fix = tonumber(hex_data:sub(3, 4), 16)
+    data.has_fix = byte_data:byte(2)
 
     -- Number of satellites
-    data.number_of_satellites = tonumber(hex_data:sub(5, 6), 16)
+    data.number_of_satellites = byte_data:byte(3)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
 
     -- Latitude
-    data.latitude = data_cls:float(hex_data:sub(33, 40))
+    data.latitude = data_cls:float(byte_data:sub(17, 20))
 
     -- Longitude
-    data.longitude = data_cls:float(hex_data:sub(41, 48))
+    data.longitude = data_cls:float(byte_data:sub(21, 24))
 
     -- Altitude
-    data.altitude = data_cls:float(hex_data:sub(49, 56))
+    data.altitude = data_cls:float(byte_data:sub(25, 28))
 
     -- Ground speed
-    data.ground_speed = data_cls:float(hex_data:sub(57, 64))
+    data.ground_speed = data_cls:float(byte_data:sub(29, 32))
 
     -- Bearing
-    data.bearing = data_cls:float(hex_data:sub(65, 72))
+    data.bearing = data_cls:float(byte_data:sub(33, 36))
 
-    hex_data = nil
+    byte_data = nil
 
     return data
 end

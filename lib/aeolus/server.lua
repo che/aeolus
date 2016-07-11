@@ -2,9 +2,9 @@
 local Server = {}
 
 
-Server.Reciver = require('aeolus/server/reciver')
+Server.Receiver = require('aeolus/server/receiver')
 Server.Emmiter = require('aeolus/server/emmiter')
-Server.Mock = require('aeolus/server/mock')
+Server.PCAPEmmiter = require('aeolus/server/pcap_emmiter')
 
 
 return Server

@@ -3,42 +3,42 @@ local AeolusInfo = {}
 
 
 AeolusInfo.ID = 51
-AeolusInfo.SIZE = 32 * 2
+AeolusInfo.SIZE = 32
 AeolusInfo.NAME = 'aeolusinfo'
 
-local _FIRMWARE_VERSION = '%s.%s.%s'
-local _MAC_ADDRESS = '%s:%s:%s:%s:%s:%s'
+local _FIRMWARE_VERSION = '%d.%d.%d'
+local _MAC_ADDRESS = '%x:%x:%x:%x:%x:%x'
 
 local _MODEL_NAME = {}
 _MODEL_NAME[65] = 'AEOLUS'
 _MODEL_NAME[83] = 'AEOLUS SENSE'
 
 
-function AeolusInfo:read(hex_data)
+function AeolusInfo:read(byte_data)
     local data = {}
 
-    -- AEOLUS model ID
-    data.model_id = tonumber(hex_data:sub(1, 2), 16)
+    -- Model ID
+    data.model_id = byte_data:byte(1)
 
-    -- AEOLUS model name
+    -- Model name
     data.model_name = _MODEL_NAME[data.model_id]
 
-    -- AEOLUS firmware version
+    -- Firmware version
     data.firmware_version = _FIRMWARE_VERSION:format(
-        tonumber(hex_data:sub(3, 4), 16),
-        tonumber(hex_data:sub(5, 6), 16),
-        tonumber(hex_data:sub(7, 8), 16))
+        byte_data:byte(2),
+        byte_data:byte(3),
+        byte_data:byte(4))
 
-    -- AEOLUS MAC address
+    -- MAC address
     data.mac_address = _MAC_ADDRESS:format(
-        hex_data:sub(17, 18),
-        hex_data:sub(19, 20),
-        hex_data:sub(21, 22),
-        hex_data:sub(23, 24),
-        hex_data:sub(25, 26),
-        hex_data:sub(27, 28))
+        byte_data:byte(8),
+        byte_data:byte(9),
+        byte_data:byte(10),
+        byte_data:byte(11),
+        byte_data:byte(12),
+        byte_data:byte(13))
 
-    hex_data = nil
+    byte_data = nil
 
     return data
 end

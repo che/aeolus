@@ -3,29 +3,29 @@ local Accel = {}
 
 
 Accel.ID = 63
-Accel.SIZE = 40 * 2
+Accel.SIZE = 40
 Accel.NAME = 'accel'
 
 
-function Accel:read(hex_data, data_cls)
+function Accel:read(byte_data, data_cls)
     local data = {}
 
     -- Data valid
-    data.data_valid = tonumber(hex_data:sub(1, 2), 16)
+    data.data_valid = byte_data:byte(1)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
 
     -- Accelerometer X
-    data.accelerometer_x = data_cls:float(hex_data:sub(33, 40))
+    data.accelerometer_x = data_cls:float(byte_data:sub(17, 20))
 
     -- Accelerometer Y
-    data.accelerometer_y = data_cls:float(hex_data:sub(41, 48))
+    data.accelerometer_y = data_cls:float(byte_data:sub(21, 24))
 
     -- Accelerometer Z
-    data.accelerometer_z = data_cls:float(hex_data:sub(49, 56))
+    data.accelerometer_z = data_cls:float(byte_data:sub(25, 28))
 
-    hex_data = nil
+    byte_data = nil
 
     return data
 end

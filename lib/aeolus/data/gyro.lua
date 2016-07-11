@@ -3,29 +3,29 @@ local Gyro = {}
 
 
 Gyro.ID = 62
-Gyro.SIZE = 32 * 2
+Gyro.SIZE = 32
 Gyro.NAME = 'gyro'
 
 
-function Gyro:read(hex_data, data_cls)
+function Gyro:read(byte_data, data_cls)
     local data = {}
 
     -- Data valid
-    data.data_valid = tonumber(hex_data:sub(1, 2), 16)
+    data.data_valid = byte_data:byte(1)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
 
     -- Gyro X
-    data.gyro_x = data_cls:float(hex_data:sub(33, 40))
+    data.gyro_x = data_cls:float(byte_data:sub(17, 20))
 
     -- Gyro Y
-    data.gyro_y = data_cls:float(hex_data:sub(41, 48))
+    data.gyro_y = data_cls:float(byte_data:sub(21, 24))
 
     -- Gyro Z
-    data.gyro_z = data_cls:float(hex_data:sub(49, 56))
+    data.gyro_z = data_cls:float(byte_data:sub(25, 28))
 
-    hex_data = nil
+    byte_data = nil
 
     return data
 end

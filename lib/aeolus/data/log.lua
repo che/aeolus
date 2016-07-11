@@ -3,11 +3,11 @@ local Log = {}
 
 
 Log.ID = 81
-Log.SIZE = 256 * 2
+Log.SIZE = 256
 Log.NAME = 'log'
 
 
-function Log:read(hex_data)
+function Log:read(byte_data)
     local data = {}
 
     return data

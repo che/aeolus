@@ -1,0 +1,122 @@
+#!/bin/sh
+
+AEOLUS_PCAP_DATA_GEN_VERSION="0.1.0"
+
+AEOLUS_PCAP_KEYS="-e ip.proto -e eth.src -e ip.src -e udp.srcport -e eth.dst -e ip.dst -e udp.dstport -e frame.time_epoch -e data.len -e data.data"
+
+AEOLUS_DIR="${AEOLUS_DIR:=$(cd "$(dirname "$0")/.." && pwd -P)}/"
+AEOLUS_PCAP_FILE=""
+AEOLUS_DATA_FILE=""
+AEOLUS_DATA_DEFAULT_FILE="aeolus.pcap.data"
+
+if [ -d "${AEOLUS_DIR}var/" ]
+then
+    AEOLUS_DATA_DEFAULT_FILE="${AEOLUS_DIR}var/${AEOLUS_DATA_DEFAULT_FILE}"
+else
+    AEOLUS_DATA_DEFAULT_FILE="./${AEOLUS_DATA_DEFAULT_FILE}"
+fi
+
+
+# Print error message and exit
+aeolus_error()
+{
+    aeolus_help
+
+    echo ""
+    echo "ERROR: ${1}"
+    [ ! -z "$2" ] && echo "$2"
+    echo ""
+
+    exit 1
+}
+
+# Options definition
+aeolus_args()
+{
+    ARGS_SHORT="p:d:vh"
+    ARGS_LONG="pcap-file:,data-file:,version,help"
+    OPTS="$(getopt -o "${ARGS_SHORT}" -l "${ARGS_LONG}" -a -- "$@" 2>/dev/null)"
+    if [ $? -gt 0 ]
+    then
+        aeolus_error "Invalid option(s) value"
+    fi
+
+    eval set -- "$OPTS"
+
+    # Options parsing
+    while [ $# -gt 0 ]
+    do
+        case $1 in
+        -- )
+            shift 1
+        ;;
+        --pcap-file | -p )
+            if [ -f "$2" ]
+            then
+                AEOLUS_PCAP_FILE="$2"
+            else
+                aeolus_error "PCAP file '${2}' does not exist"
+            fi
+            shift 2
+        ;;
+        --data-file | -d )
+            AEOLUS_DATA_FILE="$2"
+            shift 2
+        ;;
+        --version | -v )
+            echo "AEOLUS PCAP data generator version: ${AEOLUS_PCAP_DATA_GEN_VERSION}"
+            exit 0
+        ;;
+        --help | -h )
+            aeolus_help
+            exit 0
+        ;;
+        * )
+            aeolus_error "Invalid option(s)"
+        ;;
+        esac
+    done
+}
+
+# Help message
+aeolus_help()
+{
+    cat << _H_E_L_P
+
+Usage: $(basename $0) [arguments]
+
+    -p, --pcap-file    Set PCAP file.
+    -d, --data-file    Set data file (by default: ${AEOLUS_DATA_DEFAULT_FILE}).
+
+    -v, --version      Print the current version.
+    -h, --help         Show this message.
+
+_H_E_L_P
+}
+
+
+# Variables check
+aeolus_variables_check()
+{
+    tshark -v > /dev/null
+    if [ $? -gt 0 ]
+    then
+        aeolus_error "Please install tshark utility"
+    fi
+
+    if [ -z "$AEOLUS_PCAP_FILE" ]
+    then
+        aeolus_error "Please set PCAP file"
+    fi
+
+    if [ -z "$AEOLUS_DATA_FILE" ]
+    then
+        AEOLUS_DATA_FILE="$AEOLUS_DATA_DEFAULT_FILE"
+    fi
+}
+
+
+aeolus_args $@
+aeolus_variables_check
+
+tshark -r "$AEOLUS_PCAP_FILE" -V -T fields $AEOLUS_PCAP_KEYS > "$AEOLUS_DATA_FILE"

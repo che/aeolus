@@ -2,8 +2,8 @@
 local Data = {}
 
 
-Data.BLOCK_KEY = '7e'
-Data.XOR_KEY = '7d'
+Data.BLOCK_BYTE_KEY = tonumber('0x7e', 16)
+Data.XOR_BYTE_KEY = tonumber('0x7d', 16)
 
 Data.map = {}
 Data.map[63] = require('aeolus/data/accel')
@@ -24,100 +24,40 @@ Data.map[82] = require('aeolus/data/toast')
 Data.map[73] = require('aeolus/data/wind')
 
 
-local _STR_EMPTY = ''
-local _STR_2DOTS = ':'
-local _STR = '%s%s'
-
 local _STR_DOUBLE = 'd'
 local _STR_FLOAT = 'f'
 
 
-local function _data_id(hex_data)
-    return tonumber(hex_data:sub(3, 4), 16)
+local function _data_id(byte_data)
+    return byte_data:byte(2)
 end
 
-local function _data(hex_data)
-    return hex_data:sub(5, #hex_data - 6)
-end
+local function _data_crc(byte_data, data_size)
+    local byte_1, byte_2 = byte_data:byte(data_size + 3, data_size + 4)
 
-local function _data_crc(hex_data)
-    return tonumber(hex_data:sub(#hex_data - 5, #hex_data - 2), 16)
-end
-
-local function _reverse_bytes(hex_str)
-        local str = _STR_EMPTY
-
-        for i = 1, #hex_str / 2 do
-            str = string.format(_STR, hex_str:sub(i * 2 - 1, i * 2), str)
-        end
-
-    return str
-end
-
-
-if string.pack == nil and string.unpack == nil then
-    require('pack')
-
-
-    local _STR_ULONG = 'L'
-
-
-    function Data:timestamp(hex_str)
-        local ts = nil
-        local i = nil
-
-        if hex_str then
-            i, ts = string.unpack(string.pack(_STR_ULONG, tonumber(_reverse_bytes(hex_str), 16)), _STR_DOUBLE)
-        end
-
-        return ts
-    end
-
-    function Data:float(hex_str)
-        local f = nil
-        local i = nil
-
-        if hex_str then
-            i, f = string.unpack(string.pack(_STR_ULONG, tonumber(_reverse_bytes(hex_str), 16)), _STR_FLOAT)
-        end
-
-        return f
-    end
-else
-    local _STR_UINT8 = 'I8'
-    local _STR_UINT4 = 'I4'
-
-
-    function Data:timestamp(hex_str)
-        if hex_str == nil then
-            return nil
-        else
-            return string.unpack(string.pack(_STR_UINT8, tonumber(_reverse_bytes(hex_str), 16)), _STR_DOUBLE)
-        end
-    end
-
-    function Data:float(hex_str)
-        if hex_str == nil then
-            return nil
-        else
-            return string.unpack(string.pack(_STR_UINT, tonumber(_reverse_bytes(hex_str), 16)), _STR_FLOAT)
-        end
+    if byte_1 == byte_2 and byte_1 == 0 then
+        return 0
+    else
+        return byte_data:sub(data_size + 3, data_size + 4)
     end
 end
 
+local function _data(byte_data, data_size)
+    return byte_data:sub(3, data_size + 2)
+end
 
-local function _read_by_block(data_str)
-    local id = _data_id(data_str)
+local function _read_by_block(byte_data)
+    local id = _data_id(byte_data)
 
     if Data.map[id] == nil then
         return id, nil, 'ERROR: Invalid data ID'
     end
 
-    if data_str:sub(Data.map[id].SIZE + 9, Data.map[id].SIZE + 10) == Data.BLOCK_KEY then
-        if #data_str > Data.map[id].SIZE + 12 then
-            return id, data_str:sub(1, Data.map[id].SIZE + 10), data_str:sub(Data.map[id].SIZE + 11, #data_str)
+    if byte_data:byte(Data.map[id].SIZE + 5) == Data.BLOCK_BYTE_KEY then
+        if byte_data:byte(Data.map[id].SIZE + 6) == nil then
+            return id, byte_data, nil
         else
-            return id, data_str, nil
+            return id, byte_data:sub(1, Data.map[id].SIZE + 5), byte_data:sub(Data.map[id].SIZE + 6, #byte_data)
         end
     else
         return id, nil, 'ERROR: Invalid data block size'
@@ -125,24 +65,76 @@ local function _read_by_block(data_str)
 end
 
 
-function Data:check(hex_data)
-    local last_block_key = hex_data:sub(#hex_data - 1, #hex_data)
-    local first_block_key = hex_data:sub(1, 2)
+if string.pack == nil and string.unpack == nil then
+    require('pack')
 
-    if first_block_key == Data.BLOCK_KEY and first_block_key == last_block_key then
-        hex_data = hex_data:gsub(Data.XOR_KEY, _STR_EMPTY):gsub(_STR_2DOTS, _STR_EMPTY)
-    else
-        hex_data = nil
+
+    function Data:timestamp(bytes)
+        local ts = nil
+        local i = nil
+
+        if bytes then
+            i, ts = string.unpack(bytes, _STR_DOUBLE)
+        end
+
+        return ts
     end
 
-    return hex_data
+    function Data:float(bytes)
+        local f = nil
+        local i = nil
+
+        if bytes then
+            i, f = string.unpack(bytes, _STR_FLOAT)
+        end
+
+        return f
+    end
+else
+    function Data:timestamp(bytes)
+        if bytes == nil then
+            return nil
+        else
+            return string.unpack(bytes, _STR_DOUBLE)
+        end
+    end
+
+    function Data:float(bytes)
+        if bytes == nil then
+            return nil
+        else
+            return string.unpack(bytes, _STR_FLOAT)
+        end
+    end
+end
+
+function Data:check(byte_data)
+    local last_block_key = byte_data:byte(#byte_data)
+    local first_block_key = byte_data:byte(1)
+
+    if first_block_key == self.BLOCK_BYTE_KEY and first_block_key == last_block_key then
+        local _data = {}
+
+        for i = 0, #byte_data do
+            if not (byte_data:byte(i, i) == self.XOR_BYTE_KEY) then
+                _data[#_data + 1] = string.char(byte_data:byte(i))
+            end
+        end
+
+        byte_data = table.concat(_data)
+        _data = nil
+    else
+        byte_data = nil
+    end
+
+    return byte_data
 end
 
 function Data:parse(next_data)
     next_data = self:check(next_data)
 
     if next_data == nil then
-        return nil, 'ERROR: Invalid HEX data'
+        return nil, 'ERROR: Invalid byte data'
     end
 
     local data = {}
@@ -153,14 +145,18 @@ function Data:parse(next_data)
         id, current_data, next_data = _read_by_block(next_data)
 
         if current_data == nil then
-            return current_data, next_data
+            return nil, next_data
         end
 
-        crc = _data_crc(current_data)
+        crc = _data_crc(current_data, self.map[id].SIZE)
 
-        current_data = _data(current_data)
+        if crc == 0 then
+            current_data = _data(current_data, self.map[id].SIZE)
 
-        data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
+            data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
+        else
+            print(('WARNING: Invalid CRC %d'):format(crc))
+        end
     end
 
     return data, nil

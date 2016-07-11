@@ -3,29 +3,29 @@ local Magnet = {}
 
 
 Magnet.ID = 64
-Magnet.SIZE = 32 * 2
+Magnet.SIZE = 32
 Magnet.NAME = 'magnet'
 
 
-function Magnet:read(hex_data, data_cls)
+function Magnet:read(byte_data, data_cls)
     local data = {}
 
     -- Data valid
-    data.data_valid = tonumber(hex_data:sub(1, 2), 16)
+    data.data_valid = byte_data:byte(1)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(hex_data:sub(17, 32))
+    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
 
     -- Magnetometer X
-    data.magnetometer_x = data_cls:float(hex_data:sub(33, 40))
+    data.magnetometer_x = data_cls:float(byte_data:sub(17, 20))
 
     -- Magnetometer Y
-    data.magnetometer_y = data_cls:float(hex_data:sub(41, 48))
+    data.magnetometer_y = data_cls:float(byte_data:sub(21, 24))
 
     -- Magnetometer Z
-    data.magnetometer_z = data_cls:float(hex_data:sub(49, 56))
+    data.magnetometer_z = data_cls:float(byte_data:sub(25, 28))
 
-    hex_data = nil
+    byte_data = nil
 
     return data
 end
