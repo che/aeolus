@@ -28,11 +28,8 @@ local function _data_parse(byte_data)
 --print(data)
 
     for data_type, data_table in pairs(data) do
-        print(data_type)
+--        print(data_type)
 
-----        if not Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
-----            Aeolus.DB.Table.Data:table_create(values[2], data_type)
-----        end
         if not AeolusDB.Table.Data:table_exists('', data_type) then
             AeolusDB.Table.Data:table_create('', data_type)
         end
@@ -67,6 +64,7 @@ function Receiver:init()
 
 --    Aeolus.DB:create()
     AeolusDB:connect()
+    AeolusDB:settings()
 
     if not AeolusDB.Table.Emmiter:table_exists() then
         AeolusDB.Table.Emmiter:table_create()

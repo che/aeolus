@@ -8,6 +8,10 @@ DB.Table = require('aeolus/db/table')
 DB.Driver = require('aeolus/db/driver')
 
 
+function DB:settings()
+    DB.Driver.Object.DB:settings()
+end
+
 function DB:create()
     DB.Driver.Object.DB:create()
 end
