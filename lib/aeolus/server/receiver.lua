@@ -10,25 +10,30 @@ local Socket = require('socket')
 
 
 Receiver.DEFAULT_TIMEOUT = 0.01
+Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 2
 Receiver.DEFAULT_IP = '127.0.0.1'
 Receiver.DEFAULT_PORT = 5001
 Receiver.DEFAULT_SERVICE_PORT = 5002
 
-Receiver.timeout = ENV:get('AEOLUS_SERVER_RECEIVER_TIMEOUT') or Receiver.DEFAULT_TIMEOUT
-Receiver.ip = ENV:get('AEOLUS_SERVER_RECEIVER_IP') or Receiver.DEFAULT_IP
-Receiver.port = ENV:get('AEOLUS_SERVER_RECEIVER_PORT') or Receiver.DEFAULT_PORT
-Receiver.service_port = ENV:get('AEOLUS_SERVER_RECEIVER_SERVICE_PORT') or Receiver.DEFAULT_SERVICE_PORT
+Receiver.timeout = ENV:get('AEOLUS_RECEIVER_TIMEOUT') or Receiver.DEFAULT_TIMEOUT
+Receiver.timeout_multiplier = ENV:get('AEOLUS_RECEIVER_TIMEOUT_MULTIPLIER') or Receiver.DEFAULT_TIMEOUT_MULTIPLIER
+Receiver.ip = ENV:get('AEOLUS_RECEIVER_IP') or Receiver.DEFAULT_IP
+Receiver.port = ENV:get('AEOLUS_RECEIVER_PORT') or Receiver.DEFAULT_PORT
+Receiver.service_port = ENV:get('AEOLUS_RECEIVER_SERVICE_PORT') or Receiver.DEFAULT_SERVICE_PORT
 
 
 local _udp_socket = nil
 
+local _SOCKET_STATUS = {}
+_SOCKET_STATUS.timeout = 'timeout'
+_SOCKET_STATUS.closed = 'closed'
+
 
 local function _data_parse(byte_data)
     local data, error_message = AeolusData:parse(byte_data)
---print(data)
 
     for data_type, data_table in pairs(data) do
---        print(data_type)
+        print(data_type)
 
         if not AeolusDB.Table.Data:table_exists('', data_type) then
             AeolusDB.Table.Data:table_create('', data_type)
@@ -40,6 +45,50 @@ local function _data_parse(byte_data)
 ----        Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
         AeolusDB.Table.Data:insert('', data_type, data_table)
 --        Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
+    end
+end
+
+local function _receive()
+    local current_time = os.clock()
+    local data, error_message = _udp_socket:receive()
+
+    if data and error_message == nil then
+        _data_parse(data)
+    else
+        if error_message == _SOCKET_STATUS.timeout then
+--            print('WARNING: Unknown network error by timeout')
+        elseif error_message == _SOCKET_STATUS.closed then
+            print('ERROR: Network connection was closed')
+        else
+            print('ERROR: ' .. error_message)
+        end
+    end
+
+    return os.clock() - current_time
+end
+
+local function _sendto()
+    local current_time = os.clock()
+--    local data, error_message = _udp_socket:sendto('a Service',
+--                                                    Receiver.ip,
+--                                                    Receiver.service_port)
+
+--    if data and error_message == nil then
+--        print('Message send !')
+--    else
+--        print('ERROR: ' .. error_message)
+--    end
+
+    return os.clock() - current_time
+end
+
+local function _db_init()
+--    Aeolus.DB:create()
+    AeolusDB:connect()
+    AeolusDB:settings()
+
+    if not AeolusDB.Table.Emmiter:table_exists() then
+        AeolusDB.Table.Emmiter:table_create()
     end
 end
 
@@ -62,46 +111,16 @@ function Receiver:init()
         os.exit()
     end
 
---    Aeolus.DB:create()
-    AeolusDB:connect()
-    AeolusDB:settings()
-
-    if not AeolusDB.Table.Emmiter:table_exists() then
-        AeolusDB.Table.Emmiter:table_create()
-    end
+    _db_init()
 end
 
 function Receiver:run()
-    local error_message = nil
-    local data = nil
-
     while true do
-        data, error_message = _udp_socket:receive()
+        local timeout = self.timeout - (_receive() + _sendto()) * self.timeout_multiplier
 
-        if data and error_message == nil then
---            print(data:byte(2, 2))
-_data_parse(data)
-        else
-            if error_message == 'timeout' then
---                print('WARNING: Unknown network error by timeout')
-            elseif error_message == 'closed' then
-                print('ERROR: Network connection was closed')
-            else
-                print('ERROR: ' .. error_message)
-            end
+        if timeout > 0 then
+            Socket.sleep(timeout)
         end
-
-
-        data, error_message = _udp_socket:sendto('BLA BLA !!!', self.ip, self.service_port)
-
-        if data and error_message == nil then
-            print('Message send !!!')
-        else
-            print('ERROR: ' .. error_message)
-        end
-
-
-        Socket.sleep(self.timeout)
     end
 end
 
