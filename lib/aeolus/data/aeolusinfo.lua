@@ -31,12 +31,12 @@ function AeolusInfo:read(byte_data)
 
     -- MAC address
     data.mac_address = _MAC_ADDRESS:format(
-        byte_data:byte(8),
         byte_data:byte(9),
         byte_data:byte(10),
         byte_data:byte(11),
         byte_data:byte(12),
-        byte_data:byte(13))
+        byte_data:byte(13),
+        byte_data:byte(14))
 
     byte_data = nil
 
