@@ -10,7 +10,7 @@ local Socket = require('socket')
 
 
 Receiver.DEFAULT_TIMEOUT = 0.01
-Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 2
+Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 3
 Receiver.DEFAULT_IP = '127.0.0.1'
 Receiver.DEFAULT_PORT = 5001
 Receiver.DEFAULT_SERVICE_PORT = 5002
@@ -20,7 +20,6 @@ Receiver.timeout_multiplier = ENV:get('AEOLUS_RECEIVER_TIMEOUT_MULTIPLIER') or R
 Receiver.ip = ENV:get('AEOLUS_RECEIVER_IP') or Receiver.DEFAULT_IP
 Receiver.port = ENV:get('AEOLUS_RECEIVER_PORT') or Receiver.DEFAULT_PORT
 Receiver.service_port = ENV:get('AEOLUS_RECEIVER_SERVICE_PORT') or Receiver.DEFAULT_SERVICE_PORT
-
 
 local _udp_socket = nil
 
@@ -92,7 +91,6 @@ local function _sendto()
 end
 
 local function _db_init()
---    Aeolus.DB:create()
     AeolusDB:connect()
     AeolusDB:settings()
 

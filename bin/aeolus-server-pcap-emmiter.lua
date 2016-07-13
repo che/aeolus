@@ -1,9 +1,9 @@
 
-local Aeolus = require('aeolus')
+local AeolusServerPCAPEmmiter = require('aeolus/server/pcap_emmiter')
 
 
-Aeolus.Server.PCAPEmmiter:init()
+AeolusServerPCAPEmmiter:init()
 
-Aeolus.Server.PCAPEmmiter:run()
+AeolusServerPCAPEmmiter:run()
 
-Aeolus.Server.PCAPEmmiter:close()
+AeolusServerPCAPEmmiter:close()

@@ -156,6 +156,45 @@ local function _data_file_read()
     return _parse_data
 end
 
+local function _sendto(i)
+    local current_time = os.clock()
+    local data = _data_file_read()
+    local error_message = nil
+
+    if data == nil then
+        return nil
+    end
+
+    data, error_message = _udp_socket:sendto(data, PCAPEmmiter.ip, PCAPEmmiter.port)
+
+    if data and error_message == nil then
+        print(('Message send: %d !!!'):format(i))
+    else
+        print('ERROR: ' .. error_message)
+    end
+
+    return os.clock() - current_time
+end
+
+local function _receive()
+    local current_time = os.clock()
+    local data, error_message = _udp_socket_service:receive()
+
+    if data and error_message == nil then
+        print(('Message receive: %s'):format(data))
+    else
+        if error_message == 'timeout' then
+--            print('WARNING: Unknown network error by timeout')
+        elseif error_message == 'closed' then
+            print('ERROR: Network connection was closed')
+        else
+            print('ERROR: ' .. error_message)
+        end
+    end
+
+    return os.clock() - current_time
+end
+
 
 function PCAPEmmiter:init()
     _init()
@@ -164,45 +203,23 @@ function PCAPEmmiter:init()
 end
 
 function PCAPEmmiter:run()
-    local error_message = nil
-    local data = nil
     local i = 0
 
     while true do
         i = i + 1
 
-        data = _data_file_read()
+        local timeout = _sendto(i)
 
-        if data == nil then
+        if timeout == nil then
             print('Finished!')
             break
-        end
-
-        data, error_message = _udp_socket:sendto(data, self.ip, self.port)
-
-        if data and error_message == nil then
-            print(('Message send: %d !!!'):format(i))
         else
-            print('ERROR: ' .. error_message)
+            timeout = self.timeout - (timeout + _receive())
         end
 
-
-        data, error_message = _udp_socket_service:receive()
-
-        if data and error_message == nil then
-            print(('Message receive: %s'):format(data))
-        else
-            if error_message == 'timeout' then
---                print('WARNING: Unknown network error by timeout')
-            elseif error_message == 'closed' then
-                print('ERROR: Network connection was closed')
-            else
-                print('ERROR: ' .. error_message)
-            end
+        if timeout > 0 then
+            Socket.sleep(timeout)
         end
-
-
-        Socket.sleep(self.timeout)
     end
 end
 

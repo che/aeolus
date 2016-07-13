@@ -1,9 +1,9 @@
 
-local Aeolus = require('aeolus')
+local AeolusServerReceiver = require('aeolus/server/receiver')
 
 
-Aeolus.Server.Receiver:init()
+AeolusServerReceiver:init()
 
-Aeolus.Server.Receiver:run()
+AeolusServerReceiver:run()
 
-Aeolus.Server.Receiver:close()
+AeolusServerReceiver:close()
