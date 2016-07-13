@@ -2,9 +2,10 @@
 local Receiver = {}
 
 
-local AeolusData = require('aeolus/data')
-local AeolusDB = require('aeolus/db')
-local ENV = require('aeolus/env')
+local Data = require('aeolus/data')
+local Env = require('aeolus/env')
+local Log = require('aeolus/log')
+local DB = require('aeolus/db')
 
 local Socket = require('socket')
 
@@ -15,11 +16,11 @@ Receiver.DEFAULT_IP = '127.0.0.1'
 Receiver.DEFAULT_PORT = 5001
 Receiver.DEFAULT_SERVICE_PORT = 5002
 
-Receiver.timeout = ENV:get('AEOLUS_RECEIVER_TIMEOUT') or Receiver.DEFAULT_TIMEOUT
-Receiver.timeout_multiplier = ENV:get('AEOLUS_RECEIVER_TIMEOUT_MULTIPLIER') or Receiver.DEFAULT_TIMEOUT_MULTIPLIER
-Receiver.ip = ENV:get('AEOLUS_RECEIVER_IP') or Receiver.DEFAULT_IP
-Receiver.port = ENV:get('AEOLUS_RECEIVER_PORT') or Receiver.DEFAULT_PORT
-Receiver.service_port = ENV:get('AEOLUS_RECEIVER_SERVICE_PORT') or Receiver.DEFAULT_SERVICE_PORT
+Receiver.timeout = Env:get('AEOLUS_RECEIVER_TIMEOUT', Env.number) or Receiver.DEFAULT_TIMEOUT
+Receiver.timeout_multiplier = Env:get('AEOLUS_RECEIVER_TIMEOUT_MULTIPLIER', Env.number) or Receiver.DEFAULT_TIMEOUT_MULTIPLIER
+Receiver.ip = Env:get('AEOLUS_RECEIVER_IP') or Receiver.DEFAULT_IP
+Receiver.port = Env:get('AEOLUS_RECEIVER_PORT', Env.number) or Receiver.DEFAULT_PORT
+Receiver.service_port = Env:get('AEOLUS_RECEIVER_SERVICE_PORT', Env.number) or Receiver.DEFAULT_SERVICE_PORT
 
 local _udp_socket = nil
 
@@ -29,27 +30,27 @@ _SOCKET_STATUS.closed = 'closed'
 
 
 local function _data_parse(byte_data)
-    local data, error_or_mac = AeolusData:parse(byte_data)
+    local data, error_or_mac = Data:parse(byte_data)
 
     if data and error_or_mac then
-        if not AeolusDB.Table.Emmiter:exists(error_or_mac) then
+        if not DB.Table.Emmiter:exists(error_or_mac) then
             local data_table = {}
 
             data_table.mac_address = error_or_mac
             data_table.ip = Receiver.ip
             data_table.port = Receiver.port
 
-            AeolusDB.Table.Emmiter:insert(data_table)
+            DB.Table.Emmiter:insert(data_table)
             data_table = nil
         end
 
         for data_type, data_table in pairs(data) do
 print(data_type)
-            if not AeolusDB.Table.Data:table_exists(error_or_mac, data_type) then
-                AeolusDB.Table.Data:table_create(error_or_mac, data_type)
+            if not DB.Table.Data:table_exists(error_or_mac, data_type) then
+                DB.Table.Data:table_create(error_or_mac, data_type)
             end
 
-            AeolusDB.Table.Data:insert(error_or_mac, data_type, data_table)
+            DB.Table.Data:insert(error_or_mac, data_type, data_table)
         end
     elseif error_or_mac and data == nil then
         print(error_or_mac)
@@ -91,11 +92,11 @@ local function _sendto()
 end
 
 local function _db_init()
-    AeolusDB:connect()
-    AeolusDB:settings()
+    DB:connect()
+    DB:settings()
 
-    if not AeolusDB.Table.Emmiter:table_exists() then
-        AeolusDB.Table.Emmiter:table_create()
+    if not DB.Table.Emmiter:table_exists() then
+        DB.Table.Emmiter:table_create()
     end
 end
 
@@ -138,7 +139,7 @@ function Receiver:close()
 
     _udp_socket = nil
 
-    AeolusDB:close()
+    DB:close()
 end
 
 

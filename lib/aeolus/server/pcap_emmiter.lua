@@ -1,7 +1,8 @@
 
 local PCAPEmmiter = {}
 
-local ENV = require('aeolus/env')
+
+local Env = require('aeolus/env')
 
 local Socket = require('socket')
 
@@ -10,15 +11,15 @@ PCAPEmmiter.DEFAULT_TIMEOUT = 0.01
 PCAPEmmiter.DEFAULT_IP = '127.0.0.1'
 PCAPEmmiter.DEFAULT_PORT = 5001
 PCAPEmmiter.DEFAULT_SERVICE_PORT = 5002
-PCAPEmmiter.DEFAULT_DATA_FILE = ENV.VAR_DIR .. '/aeolus.pcap.data'
+PCAPEmmiter.DEFAULT_DATA_FILE = Env.VAR_DIR .. '/aeolus.pcap.data'
 PCAPEmmiter.DEFAULT_DATA_LOOP = false
 
-PCAPEmmiter.timeout = ENV:get('AEOLUS_PCAP_EMMITER_TIMEOUT') or PCAPEmmiter.DEFAULT_TIMEOUT
-PCAPEmmiter.ip = ENV:get('AEOLUS_PCAP_EMMITER_IP') or PCAPEmmiter.DEFAULT_IP
-PCAPEmmiter.port = ENV:get('AEOLUS_PCAP_EMMITER_PORT') or PCAPEmmiter.DEFAULT_PORT
-PCAPEmmiter.service_port = ENV:get('AEOLUS_PCAP_EMMITER_SERVICE_PORT') or PCAPEmmiter.DEFAULT_SERVICE_PORT
-PCAPEmmiter.data_file = ENV:get('AEOLUS_PCAP_EMMITER_DATA_FILE') or PCAPEmmiter.DEFAULT_DATA_FILE
-PCAPEmmiter.data_loop = ENV:get('AEOLUS_PCAP_EMMITER_DATA_LOOP') or PCAPEmmiter.DEFAULT_DATA_LOOP
+PCAPEmmiter.timeout = Env:get('AEOLUS_PCAP_EMMITER_TIMEOUT', Env.number) or PCAPEmmiter.DEFAULT_TIMEOUT
+PCAPEmmiter.ip = Env:get('AEOLUS_PCAP_EMMITER_IP') or PCAPEmmiter.DEFAULT_IP
+PCAPEmmiter.port = Env:get('AEOLUS_PCAP_EMMITER_PORT', Env.number) or PCAPEmmiter.DEFAULT_PORT
+PCAPEmmiter.service_port = Env:get('AEOLUS_PCAP_EMMITER_SERVICE_PORT', Env.number) or PCAPEmmiter.DEFAULT_SERVICE_PORT
+PCAPEmmiter.data_file = Env:get('AEOLUS_PCAP_EMMITER_DATA_FILE') or PCAPEmmiter.DEFAULT_DATA_FILE
+PCAPEmmiter.data_loop = Env:get('AEOLUS_PCAP_EMMITER_DATA_LOOP', Env.boolean) or PCAPEmmiter.DEFAULT_DATA_LOOP
 
 
 local _MAC_ADDRESS_SEP = ':'
@@ -58,7 +59,7 @@ local function _init()
         print('ERROR: Already exixsts!')
         _close()
 
-        os.exit()
+        os.exit(1)
     end
 end
 
@@ -118,7 +119,7 @@ local function _data_file_parse(pcap_data)
         end
 
         if #value == 10 then
-            value = _hex_data_to_binary(value[10]:gsub( _MAC_ADDRESS_SEP, _EMPTY_STR))
+            value = _hex_data_to_binary(value[10]:gsub(_MAC_ADDRESS_SEP, _EMPTY_STR))
         else
             value = nil
         end
@@ -168,7 +169,7 @@ local function _sendto(i)
     data, error_message = _udp_socket:sendto(data, PCAPEmmiter.ip, PCAPEmmiter.port)
 
     if data and error_message == nil then
-        print(('Message send: %d !!!'):format(i))
+        print(('Message send: %d'):format(i))
     else
         print('ERROR: ' .. error_message)
     end
