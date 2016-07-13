@@ -38,20 +38,20 @@ function DB.Table.Emmiter:table_exists()
     return DB.Table._Emmiter:table_exists()
 end
 
-function DB.Table.Emmiter:exists(source_mac)
-    return DB.Table._Emmiter:exists(source_mac)
+function DB.Table.Emmiter:exists(mac_address)
+    return DB.Table._Emmiter:exists(mac_address)
 end
 
 function DB.Table.Emmiter:table_create()
     return DB.Table._Emmiter:table_create(DB.Driver.Object)
 end
 
-function DB.Table.Emmiter:insert(values)
-    return DB.Table._Emmiter:insert(DB.Driver.Object, values)
+function DB.Table.Emmiter:insert(data_table)
+    return DB.Table._Emmiter:insert(DB.Driver.Object, data_table)
 end
 
-function DB.Table.Emmiter:delete(source_mac)
-    return DB.Table._Emmiter:delete(DB.Driver.Object, source_mac)
+function DB.Table.Emmiter:delete(mac_address)
+    return DB.Table._Emmiter:delete(DB.Driver.Object, mac_address)
 end
 
 function DB.Table.Emmiter:table_delete()
@@ -62,28 +62,28 @@ end
 DB.Table.Data = {}
 
 
-function DB.Table.Data:table_exists(source_mac, data_type)
-    return DB.Table._Data:table_exists(source_mac, data_type)
+function DB.Table.Data:table_exists(mac_address, data_type)
+    return DB.Table._Data:table_exists(mac_address, data_type)
 end
 
-function DB.Table.Data:table_create(source_mac, data_type)
-    return DB.Table._Data:table_create(DB.Driver.Object, source_mac, data_type)
+function DB.Table.Data:table_create(mac_address, data_type)
+    return DB.Table._Data:table_create(DB.Driver.Object, mac_address, data_type)
 end
 
-function DB.Table.Data:insert(source_mac, data_type, data_table)
-    return DB.Table._Data:insert(DB.Driver.Object, source_mac, data_type, data_table)
+function DB.Table.Data:insert(mac_address, data_type, data_table)
+    return DB.Table._Data:insert(DB.Driver.Object, mac_address, data_type, data_table)
 end
 
-function DB.Table.Data:delete(source_mac, data_type, data_table)
-    return DB.Table._Data:delete(DB.Driver.Object, source_mac, data_type, data_table)
+function DB.Table.Data:delete(mac_address, data_type, data_table)
+    return DB.Table._Data:delete(DB.Driver.Object, mac_address, data_type, data_table)
 end
 
-function DB.Table.Data:table_delete(source_mac, data_type)
-    return DB.Table._Data:table_delete(DB.Driver.Object, source_mac, data_type)
+function DB.Table.Data:table_delete(mac_address, data_type)
+    return DB.Table._Data:table_delete(DB.Driver.Object, mac_address, data_type)
 end
 
-function DB.Table.Data:table_name(source_mac, data_type)
-    return DB.Table._Data:table_name(source_mac, data_type)
+function DB.Table.Data:table_name(mac_address, data_type)
+    return DB.Table._Data:table_name(mac_address, data_type)
 end
 
 

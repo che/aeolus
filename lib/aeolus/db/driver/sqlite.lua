@@ -110,13 +110,11 @@ function SQLite:execute(sql)
 
         if status then
             _connection:execute(_TRANSACTION.commit)
-
-            return true
         else
             _connection:execute(_TRANSACTION.rollback)
-
-            return false
         end
+
+        return status
     else
         return nil
     end

@@ -11,8 +11,7 @@ local _SQL_TABLE_STRUCTURE = [[
         accelerometer_x FLOAT(4) NOT NULL,
         accelerometer_y FLOAT(4) NOT NULL,
         accelerometer_z FLOAT(4) NOT NULL,
-        created_at FLOAT(8) NOT NULL,
-        UNIQUE (timestamp, accelerometer_x, accelerometer_y, accelerometer_z)
+        created_at FLOAT(8) NOT NULL
 ]]
 
 local _SQL_INSERT = [[

@@ -11,35 +11,24 @@ local _table_exists = false
 
 local _SQL_TABLE_CREATE = [[
     CREATE TABLE IF NOT EXISTS emmiter (
-        protocol VARCHAR(3) NOT NULL,
-        source_mac VARCHAR(17) NOT NULL,
-        source_ipv4 VARCHAR(15) NOT NULL,
-        source_port INTEGER(5) NOT NULL,
-        destination_mac VARCHAR(17) NOT NULL,
-        destination_ipv4 VARCHAR(15) NOT NULL,
-        destination_port INTEGER(5) NOT NULL,
+        mac_address VARCHAR(17) NOT NULL,
+        ip VARCHAR(15) NOT NULL,
+        port INTEGER(5) NOT NULL,
         created_at FLOAT(8) NOT NULL,
-        UNIQUE (source_mac));
+        UNIQUE (mac_address, ip, port));
 ]]
 
 local _SQL_INSERT = [[
-    INSERT INTO emmiter (protocol,
-                        source_mac,
-                        source_ipv4,
-                        source_port,
-                        destination_mac,
-                        destination_ipv4,
-                        destination_port,
-                        created_at)
-                VALUES ('%s', '%s', '%s', '%d', '%s', '%s', '%d', '%.8f')
+    INSERT INTO emmiter (mac_address, ip, port, created_at)
+                        VALUES ('%s', '%s', '%d', '%.8f');
 ]]
 
 local _SQL_SELECT = [[
-    SELECT * FROM emmiter WHERE source_mac = '%s' LIMIT 1
+    SELECT * FROM emmiter WHERE mac_address = '%s' LIMIT 1;
 ]]
 
 local _SQL_DELETE = [[
-    DELETE FROM emmiter WHERE source_mac = '%s'
+    DELETE FROM emmiter WHERE mac_address = '%s';
 ]]
 
 local _SQL_TABLE_DELETE = [[
@@ -49,9 +38,9 @@ local _SQL_TABLE_DELETE = [[
 local _STR_KEY_ALL = 'a'
 
 
-function Emmiter:exists(source_mac)
+function Emmiter:exists(mac_address)
     for i = 1, #_emmiter_cache do
-        if _emmiter_cache[i] == source_mac then
+        if _emmiter_cache[i] == mac_address then
             return true
         end
     end
@@ -63,8 +52,8 @@ function Emmiter:table_exists()
     return _table_exists
 end
 
-function Emmiter:exists_in_table(driver_obj, source_mac)
-    local cursor, error_message = driver_obj:execute(_SQL_SELECT, source_mac)
+function Emmiter:exists_in_table(driver_obj, mac_address)
+    local cursor, error_message = driver_obj:execute(_SQL_SELECT, mac_address)
 --    print(cursor, error_message)
 
     if not nil == error_message or cursor == nil then
@@ -73,10 +62,11 @@ function Emmiter:exists_in_table(driver_obj, source_mac)
 
     if cursor:fetch({}, _STR_KEY_ALL) == nil then
         cursor:close()
+
         return false
     else
         cursor:close()
-        table.insert(_emmiter_cache, source_mac)
+        table.insert(_emmiter_cache, mac_address)
     end
 
     return true
@@ -94,16 +84,12 @@ function Emmiter:table_create(driver_obj)
     return true
 end
 
-function Emmiter:insert(driver_obj, values)
-    if not self:exists_in_table(driver_obj, values[2]) then
+function Emmiter:insert(driver_obj, data_table)
+    if not self:exists_in_table(driver_obj, data_table.mac_address) then
         local status, error_message = driver_obj:execute(_SQL_INSERT:format(
-                                                        values[1],
-                                                        values[2],
-                                                        values[3],
-                                                        values[4],
-                                                        values[5],
-                                                        values[6],
-                                                        values[7],
+                                                        data_table.mac_address,
+                                                        data_table.ip,
+                                                        data_table.port,
                                                         os.time()))
 --        print(status, error_message)
 
@@ -112,14 +98,14 @@ function Emmiter:insert(driver_obj, values)
         end
     end
 
-    table.insert(_emmiter_cache, values[2])
+    table.insert(_emmiter_cache, data_table.mac_address)
 
     return true
 end
 
-function Emmiter:delete(driver_obj, source_mac)
-    if self:exists_in_table(driver_obj, source_mac) then
-        local status, error_message = driver_obj:execute(_SQL_DELETE, source_mac)
+function Emmiter:delete(driver_obj, mac_address)
+    if self:exists_in_table(driver_obj, mac_address) then
+        local status, error_message = driver_obj:execute(_SQL_DELETE, mac_address)
 --        print(status, error_message)
 
         if not nil == error_message then
@@ -128,7 +114,7 @@ function Emmiter:delete(driver_obj, source_mac)
     end
 
     for id, value in pairs(_emmiter_cache) do
-        if value == source_mac then
+        if value == mac_address then
             table.remove(_emmiter_cache, id)
             break
         end

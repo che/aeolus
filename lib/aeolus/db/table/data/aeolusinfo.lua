@@ -11,7 +11,7 @@ local _SQL_TABLE_STRUCTURE = [[
         firmware_version VARCHAR(8) NOT NULL,
         mac_address VARCHAR(17) NOT NULL,
         created_at FLOAT(8) NOT NULL,
-        UNIQUE (mac_address, firmware_version)
+        UNIQUE (model_id, mac_address, firmware_version)
 ]]
 
 local _SQL_INSERT = [[

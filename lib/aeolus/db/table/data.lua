@@ -26,7 +26,6 @@ Data.map['wind'] = require('aeolus/db/table/data/wind')
 local _data_cache = {}
 local _DATA_CACHE_TYPE = 'table'
 
-local _STR_EMPTY = ''
 local _STR_TABLE_NAME = '%s%s_%s'
 
 local _SQL_TABLE_CREATE = [[
@@ -39,11 +38,11 @@ local _SQL_TABLE_DELETE = [[
 ]]
 
 
-local function _data_cache_add(source_mac, data_type)
+local function _data_cache_add(mac_address, data_type)
     local _mac = nil
 
     for mac, list_data in pairs(_data_cache) do
-        if mac == source_mac and type(list_data) == _DATA_CACHE_TYPE then
+        if mac == mac_address and type(list_data) == _DATA_CACHE_TYPE then
             _mac = mac
             list_data[#list_data + 1] = data_type
             break
@@ -51,14 +50,14 @@ local function _data_cache_add(source_mac, data_type)
     end
 
     if _mac == nil then
-        _data_cache[source_mac] = {}
-        table.insert(_data_cache[source_mac], data_type)
+        _data_cache[mac_address] = {}
+        table.insert(_data_cache[mac_address], data_type)
     end
 end
 
-local function _data_cache_delete(source_mac, data_type)
+local function _data_cache_delete(mac_address, data_type)
     for mac, list_data in pairs(_data_cache) do
-        if mac == source_mac and type(list_data) == _DATA_CACHE_TYPE then
+        if mac == mac_address and type(list_data) == _DATA_CACHE_TYPE then
             for i = 1, #list_data do
                 if list_data[i] == data_type then
                     table.remove(list_data, i)
@@ -68,7 +67,7 @@ local function _data_cache_delete(source_mac, data_type)
 
             if #list_data == 0 then
                 for i, value in ipairs(_data_cache) do
-                    if value == source_mac then
+                    if value == mac_address then
                         table.remove(_data_cache, i)
                         break
                     end
@@ -85,9 +84,9 @@ local function _sql_create_table(data_type, table_name)
 end
 
 
-function Data:table_exists(source_mac, data_type)
+function Data:table_exists(mac_address, data_type)
     for mac, list_data in pairs(_data_cache) do
-        if mac == source_mac and type(list_data) == _DATA_CACHE_TYPE then
+        if mac == mac_address and type(list_data) == _DATA_CACHE_TYPE then
             for i = 1, #list_data do
                 if list_data[i] == data_type then
                     return true
@@ -99,46 +98,46 @@ function Data:table_exists(source_mac, data_type)
     return false
 end
 
-function Data:table_create(driver_obj, source_mac, data_type)
-    local table_name = self:table_name(source_mac, data_type)
+function Data:table_create(driver_obj, mac_address, data_type)
+    local table_name = self:table_name(mac_address, data_type)
     local status, error_message = driver_obj:execute(_sql_create_table(data_type, table_name))
 
     if not nil == error_message then
         return false
     end
 
-    _data_cache_add(source_mac, data_type)
+    _data_cache_add(mac_address, data_type)
 
     return true
 end
 
-function Data:insert(driver_obj, source_mac, data_type, data_table)
-    local table_name = self:table_name(source_mac, data_type)
+function Data:insert(driver_obj, mac_address, data_type, data_table)
+    local table_name = self:table_name(mac_address, data_type)
 
     self.map[data_type]:insert(driver_obj, table_name, data_table)
 end
 
-function Data:delete(driver_obj, source_mac, data_type, data_table)
-    local table_name = self:table_name(source_mac, data_type)
+function Data:delete(driver_obj, mac_address, data_type, data_table)
+    local table_name = self:table_name(mac_address, data_type)
 
     self.map[data_type]:delete(driver_obj, table_name, data_table)
 end
 
-function Data:table_delete(driver_obj, source_mac, data_type)
-    local table_name = self:table_name(source_mac, data_type)
+function Data:table_delete(driver_obj, mac_address, data_type)
+    local table_name = self:table_name(mac_address, data_type)
     local status, error_message = driver_obj:execute(_SQL_TABLE_DELETE:format(table_name))
 
     if not nil == error_message then
         return false
     end
 
-    _data_cache_delete(source_mac, data_type)
+    _data_cache_delete(mac_address, data_type)
 
     return true
 end
 
-function Data:table_name(source_mac, data_type)
-    return _STR_TABLE_NAME:format(self.NAME, source_mac:gsub(':', _STR_EMPTY), data_type)
+function Data:table_name(mac_address, data_type)
+    return _STR_TABLE_NAME:format(self.NAME, mac_address, data_type)
 end
 
 

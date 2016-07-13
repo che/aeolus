@@ -30,21 +30,30 @@ _SOCKET_STATUS.closed = 'closed'
 
 
 local function _data_parse(byte_data)
-    local data, error_message = AeolusData:parse(byte_data)
+    local data, error_or_mac = AeolusData:parse(byte_data)
 
-    for data_type, data_table in pairs(data) do
-        print(data_type)
+    if data and error_or_mac then
+        if not AeolusDB.Table.Emmiter:exists(error_or_mac) then
+            local data_table = {}
 
-        if not AeolusDB.Table.Data:table_exists('', data_type) then
-            AeolusDB.Table.Data:table_create('', data_type)
+            data_table.mac_address = error_or_mac
+            data_table.ip = Receiver.ip
+            data_table.port = Receiver.port
+
+            AeolusDB.Table.Emmiter:insert(data_table)
+            data_table = nil
         end
---        if Aeolus.DB.Table.Data:table_exists(values[2], data_type) then
---            Aeolus.DB.Table.Data:table_delete(values[2], data_type)
---        end
 
-----        Aeolus.DB.Table.Data:insert(values[2], data_type, data_table)
-        AeolusDB.Table.Data:insert('', data_type, data_table)
---        Aeolus.DB.Table.Data:delete(values[2], data_type, data_table)
+        for data_type, data_table in pairs(data) do
+print(data_type)
+            if not AeolusDB.Table.Data:table_exists(error_or_mac, data_type) then
+                AeolusDB.Table.Data:table_create(error_or_mac, data_type)
+            end
+
+            AeolusDB.Table.Data:insert(error_or_mac, data_type, data_table)
+        end
+    elseif error_or_mac and data == nil then
+        print(error_or_mac)
     end
 end
 

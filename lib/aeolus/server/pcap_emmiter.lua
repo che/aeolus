@@ -21,8 +21,16 @@ PCAPEmmiter.data_file = ENV:get('AEOLUS_PCAP_EMMITER_DATA_FILE') or PCAPEmmiter.
 PCAPEmmiter.data_loop = ENV:get('AEOLUS_PCAP_EMMITER_DATA_LOOP') or PCAPEmmiter.DEFAULT_DATA_LOOP
 
 
+local _MAC_ADDRESS_SEP = ':'
+local _SPACE_SEP = '%S+'
+local _SPACE_STR = ' '
+local _EMPTY_STR = ''
+local _TAB_STR = '\t'
+
 local _KEY_READ_LINE = '*line'
 local _KEY_BROADCAST = 'broadcast'
+
+local _FILE_R_MODE = 'r'
 
 local _udp_socket = nil
 local _udp_socket_send = nil
@@ -90,7 +98,7 @@ end
 local function _data_file_init()
     _data_file_close()
 
-    _data_file = io.open(PCAPEmmiter.data_file, 'r')
+    _data_file = io.open(PCAPEmmiter.data_file, _FILE_R_MODE)
 end
 
 local function _hex_data_to_binary(hex_data)
@@ -105,12 +113,12 @@ local function _data_file_parse(pcap_data)
     if pcap_data then
         local value = {}
 
-        for i in string.gmatch(pcap_data:gsub('\t', ' '), '%S+') do
+        for i in string.gmatch(pcap_data:gsub(_TAB_STR, _SPACE_STR), _SPACE_SEP) do
             value[#value + 1] = i
         end
 
         if #value == 10 then
-            value = _hex_data_to_binary(value[10]:gsub(':', ''))
+            value = _hex_data_to_binary(value[10]:gsub( _MAC_ADDRESS_SEP, _EMPTY_STR))
         else
             value = nil
         end

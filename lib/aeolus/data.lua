@@ -27,6 +27,23 @@ Data.map[73] = require('aeolus/data/wind')
 local _STR_DOUBLE = 'd'
 local _STR_FLOAT = 'f'
 
+local _MAC_ADDRESS_SEP = ':'
+local _EMPTY_STR = ''
+
+local _mac_address = nil
+local _mac_address_native = nil
+
+
+local function _define_mac_address(id, data, read_data)
+    if _mac_address == nil then
+        _mac_address_native = read_data.mac_address
+        _mac_address = _mac_address_native:gsub(_MAC_ADDRESS_SEP, _EMPTY_STR)
+
+        data[Data.map[id].NAME] = read_data
+    elseif not (_mac_address_native == read_data.mac_address) then
+        print('ERROR: Wrong MAC Address for current data')
+    end
+end
 
 local function _data_id(byte_data)
     return byte_data:byte(2)
@@ -70,14 +87,14 @@ if string.pack == nil and string.unpack == nil then
 
 
     function Data:timestamp(bytes)
-        local ts = nil
+        local d = nil
         local i = nil
 
         if bytes then
-            i, ts = string.unpack(bytes, _STR_DOUBLE)
+            i, d = bytes:unpack(_STR_DOUBLE)
         end
 
-        return ts
+        return d
     end
 
     function Data:float(bytes)
@@ -85,7 +102,7 @@ if string.pack == nil and string.unpack == nil then
         local i = nil
 
         if bytes then
-            i, f = string.unpack(bytes, _STR_FLOAT)
+            i, f = bytes:unpack(_STR_FLOAT)
         end
 
         return f
@@ -95,7 +112,7 @@ else
         if bytes == nil then
             return nil
         else
-            return string.unpack(bytes, _STR_DOUBLE)
+            return bytes:unpack(_STR_DOUBLE)
         end
     end
 
@@ -103,7 +120,7 @@ else
         if bytes == nil then
             return nil
         else
-            return string.unpack(bytes, _STR_FLOAT)
+            return bytes:unpack(_STR_FLOAT)
         end
     end
 end
@@ -145,21 +162,25 @@ function Data:parse(next_data)
         id, current_data, next_data = _read_by_block(next_data)
 
         if current_data == nil then
-            return nil, next_data
-        end
 
-        crc = _data_crc(current_data, self.map[id].SIZE)
-
-        if crc == 0 then
-            current_data = _data(current_data, self.map[id].SIZE)
-
-            data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
         else
-            print(('WARNING: Invalid CRC %d'):format(crc))
+            crc = _data_crc(current_data, self.map[id].SIZE)
+
+            if crc == 0 then
+                current_data = _data(current_data, self.map[id].SIZE)
+
+                if id == 51 then  -- AeolusInfo
+                    _define_mac_address(id, data, self.map[id]:read(current_data, Data))
+                elseif _mac_address then
+                    data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
+                end
+            else
+                print(('WARNING: Invalid CRC %x'):format(crc))
+            end
         end
     end
 
-    return data, nil
+    return data, _mac_address
 end
 
 
