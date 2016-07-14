@@ -25,12 +25,14 @@ PCAPEmmiter.data_dir = Env:get('AEOLUS_PCAP_EMMITER_DATA_DIR') or PCAPEmmiter.DE
 PCAPEmmiter.data_loop = Env:get('AEOLUS_PCAP_EMMITER_DATA_LOOP', Env.boolean) or PCAPEmmiter.DEFAULT_DATA_LOOP
 
 
+local _HEX_FORMAT_STR = '%02x'
 local _MAC_ADDRESS_SEP = ':'
 local _SPACE_SEP = '%S+'
 local _2DOTS_STR = '..'
 local _SPACE_STR = ' '
 local _EMPTY_STR = ''
 local _TAB_STR = '\t'
+local _DOT_STR = '.'
 
 local _KEY_READ_LINE = '*line'
 local _KEY_BROADCAST = 'broadcast'
@@ -122,6 +124,13 @@ local function _hex_data_to_binary(hex_data)
     )
 end
 
+local function _binary_data_to_hex(byte_data)
+    return (byte_data:gsub(_DOT_STR, function (c)
+            return string.format(_HEX_FORMAT_STR, string.byte(c))
+        end)
+    )
+end
+
 local function _data_file_parse(pcap_data)
     if pcap_data then
         local value = {}
@@ -155,7 +164,7 @@ local function _data_file_read()
         _data_file_close()
 
         if PCAPEmmiter.data_loop then
-            Log:debug('PCAP Emmiter: data file was opened')
+            Log:debug('PCAP Emmiter: data file was opened (loop)')
             _data_file_init()
 
             _data = _data_file:read(_KEY_READ_LINE)
@@ -173,21 +182,22 @@ end
 
 local function _sendto()
     local current_time = os.clock()
-    local data = _data_file_read()
+    local byte_data = _data_file_read()
     local error_message = nil
 
-    if data == nil then
+    if byte_data == nil then
         return nil
     end
 
-    data, error_message = _udp_socket:sendto(data, PCAPEmmiter.ip, PCAPEmmiter.port)
+    local data, error_message = _udp_socket:sendto(byte_data, PCAPEmmiter.ip, PCAPEmmiter.port)
     Log:debug(('PCAP Emmiter: data was sent on ip=%s, port=%s'):format(PCAPEmmiter.ip, PCAPEmmiter.port))
 
     if data and error_message == nil then
-        Log:debug(('PCAP Emmiter: data was sent: %x'):format(data))
+        Log:debug(('PCAP Emmiter: data was sent: %s'):format(_binary_data_to_hex(byte_data)))
     else
         Log:error('PCAP Emmiter: ' .. error_message)
     end
+    byte_data = nil
 
     return os.clock() - current_time
 end
