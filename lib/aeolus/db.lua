@@ -8,25 +8,7 @@ DB.Table = require('aeolus/db/table')
 DB.Driver = require('aeolus/db/driver')
 
 
-function DB:settings()
-    return DB.Driver.Object.DB:settings()
-end
-
-function DB:create()
-    return DB.Driver.Object.DB:create()
-end
-
-function DB:delete()
-    return DB.Driver.Object.DB:delete()
-end
-
-function DB:connect()
-    return DB.Driver.Object.DB:connect()
-end
-
-function DB:close()
-    return DB.Driver.Object.DB:close()
-end
+setmetatable(DB, {__index = DB.Driver.Object.DB})
 
 
 DB.Table.Emmiter = {}

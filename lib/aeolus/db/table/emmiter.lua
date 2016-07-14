@@ -18,7 +18,7 @@ local _SQL_TABLE_CREATE = [[
         ip VARCHAR(15) NOT NULL,
         port INTEGER(5) NOT NULL,
         created_at FLOAT(8) NOT NULL,
-        UNIQUE (mac_address, ip, port));
+        UNIQUE (mac_address));
 ]]
 
 local _SQL_INSERT = [[
@@ -60,6 +60,7 @@ function Emmiter:exists_in_table(driver_obj, mac_address)
 
     if error_message or cursor == nil then
         Log:debug(('DB Emmiter: emmiter %s does not exist in table: %s'):format(mac_address, error_message))
+
         return false
     end
 
@@ -82,6 +83,7 @@ function Emmiter:table_create(driver_obj)
 
     if error_message then
         Log:warn(('DB Emmiter: table emmiter was not created: %s'):format(error_message))
+
         return false
     end
 

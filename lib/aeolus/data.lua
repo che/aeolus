@@ -26,7 +26,7 @@ _map[65] = require('aeolus/data/temp')
 _map[82] = require('aeolus/data/toast')
 _map[73] = require('aeolus/data/wind')
 -- Inheritance
-for i, class in pairs(_map) do
+for _, class in pairs(_map) do
     setmetatable(class, {__index = Data})
 end
 

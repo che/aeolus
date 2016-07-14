@@ -47,7 +47,7 @@ SQLite.DB = {}
 SQLite.DB.NAME = SQLite.DB_NAME
 
 
-local function _file_exists(path)
+local function _db_file_exists(path)
     file = io.open(path)
 
     if file == nil then
@@ -80,7 +80,7 @@ function SQLite.DB:settings()
 end
 
 function SQLite.DB:create()
-    if _file_exists(_DB_PATH) then
+    if _db_file_exists(_DB_PATH) then
         Log:fatal(('DB Driver SQLite: DB %s already exists!'):format(SQLite.DB_NAME))
         os.exit(1)
     else
@@ -93,7 +93,7 @@ function SQLite.DB:create()
 end
 
 function SQLite.DB:delete()
-    if _file_exists(_DB_PATH) then
+    if _db_file_exists(_DB_PATH) then
         os.remove(_DB_PATH)
         Log:debug(('DB Driver SQLite: DB %s was deleted'):format(SQLite.DB_NAME))
     else
