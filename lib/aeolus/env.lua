@@ -1,5 +1,9 @@
 
-local Env = {}
+if Env then
+    return
+else
+    Env = {}
+end
 
 
 Env.string = 0
@@ -12,7 +16,7 @@ local _TRUE_STR = 'true'
 
 
 local function _setdir(sub_dir)
-    return Env.PROJECT_DIR .. sub_dir
+    return Env.PROJECT_DIR .. sub_dir .. Env.SEP
 end
 
 
@@ -47,12 +51,10 @@ function Env:get(var, _type)
 end
 
 
-Env.PROJECT_DIR = ('%s../'):format(Env:dirname(arg[0]))
+Env.SEP = '/'
 
+Env.PROJECT_DIR = Env:dirname(arg[0]) .. '..' .. Env.SEP
 Env.BIN_DIR = Env:get('AEOLUS_BIN_DIR') or _setdir('bin')
 Env.ETC_DIR = Env:get('AEOLUS_ETC_DIR') or _setdir('etc')
 Env.LIB_DIR = Env:get('AEOLUS_LIB_DIR') or _setdir('lib')
 Env.VAR_DIR = Env:get('AEOLUS_VAR_DIR') or _setdir('var')
-
-
-return Env

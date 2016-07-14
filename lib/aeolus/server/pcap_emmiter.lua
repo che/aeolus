@@ -2,7 +2,8 @@
 local PCAPEmmiter = {}
 
 
-local Env = require('aeolus/env')
+require('aeolus/env')
+require('aeolus/log')
 
 local Socket = require('socket')
 
@@ -11,7 +12,8 @@ PCAPEmmiter.DEFAULT_TIMEOUT = 0.01
 PCAPEmmiter.DEFAULT_IP = '127.0.0.1'
 PCAPEmmiter.DEFAULT_PORT = 5001
 PCAPEmmiter.DEFAULT_SERVICE_PORT = 5002
-PCAPEmmiter.DEFAULT_DATA_FILE = Env.VAR_DIR .. '/aeolus.pcap.data'
+PCAPEmmiter.DEFAULT_DATA_FILE = 'aeolus.pcap.data'
+PCAPEmmiter.DEFAULT_DATA_DIR = Env.VAR_DIR
 PCAPEmmiter.DEFAULT_DATA_LOOP = false
 
 PCAPEmmiter.timeout = Env:get('AEOLUS_PCAP_EMMITER_TIMEOUT', Env.number) or PCAPEmmiter.DEFAULT_TIMEOUT
@@ -19,11 +21,13 @@ PCAPEmmiter.ip = Env:get('AEOLUS_PCAP_EMMITER_IP') or PCAPEmmiter.DEFAULT_IP
 PCAPEmmiter.port = Env:get('AEOLUS_PCAP_EMMITER_PORT', Env.number) or PCAPEmmiter.DEFAULT_PORT
 PCAPEmmiter.service_port = Env:get('AEOLUS_PCAP_EMMITER_SERVICE_PORT', Env.number) or PCAPEmmiter.DEFAULT_SERVICE_PORT
 PCAPEmmiter.data_file = Env:get('AEOLUS_PCAP_EMMITER_DATA_FILE') or PCAPEmmiter.DEFAULT_DATA_FILE
+PCAPEmmiter.data_dir = Env:get('AEOLUS_PCAP_EMMITER_DATA_DIR') or PCAPEmmiter.DEFAULT_DATA_DIR
 PCAPEmmiter.data_loop = Env:get('AEOLUS_PCAP_EMMITER_DATA_LOOP', Env.boolean) or PCAPEmmiter.DEFAULT_DATA_LOOP
 
 
 local _MAC_ADDRESS_SEP = ':'
 local _SPACE_SEP = '%S+'
+local _2DOTS_STR = '..'
 local _SPACE_STR = ' '
 local _EMPTY_STR = ''
 local _TAB_STR = '\t'
@@ -33,6 +37,10 @@ local _KEY_BROADCAST = 'broadcast'
 
 local _FILE_R_MODE = 'r'
 
+local _SOCKET_STATUS = {}
+_SOCKET_STATUS.timeout = 'timeout'
+_SOCKET_STATUS.closed = 'closed'
+
 local _udp_socket = nil
 local _udp_socket_send = nil
 local _data_file = nil
@@ -41,6 +49,7 @@ local _data_file = nil
 local function _close()
     if _udp_socket then
         _udp_socket:close()
+        Log:debug('PCAP Emmiter: UDP socket was closed')
     end
 
     _udp_socket = nil
@@ -54,9 +63,9 @@ local function _init()
     _udp_socket:settimeout(0)
 
     if _udp_socket:setoption(_KEY_BROADCAST, true) then
-
+        Log:debug('PCAP Emmiter: set option BROADCAST')
     else
-        print('ERROR: Already exixsts!')
+        Log:fatal('PCAP Emmiter already was runned!')
         _close()
 
         os.exit(1)
@@ -66,6 +75,7 @@ end
 local function _service_close()
     if _udp_socket_service then
         _udp_socket_service:close()
+        Log:debug('PCAP Emmiter: UDP socket was closed for service')
     end
 
     _udp_socket_service = nil
@@ -79,18 +89,19 @@ local function _service_init()
     _udp_socket_service:settimeout(0)
 
     if _udp_socket_service:setsockname(PCAPEmmiter.ip, PCAPEmmiter.service_port) then
-
+        Log:debug(('PCAP Emmiter: UDP socket was setuped for service ip=%s, port=%s'):format(PCAPEmmiter.ip, PCAPEmmiter.service_port))
     else
-        print('ERROR: Already exixsts!')
+        Log:fatal('PCAP Emmiter already was runned for service!')
         _service_close()
 
-        os.exit()
+        os.exit(1)
     end
 end
 
 local function _data_file_close()
     if _data_file then
         _data_file:close()
+        Log:debug('PCAP Emmiter: data file handler was closed')
     end
 
     _data_file = nil
@@ -99,11 +110,12 @@ end
 local function _data_file_init()
     _data_file_close()
 
-    _data_file = io.open(PCAPEmmiter.data_file, _FILE_R_MODE)
+    _data_file = io.open(PCAPEmmiter.data_dir .. PCAPEmmiter.data_file, _FILE_R_MODE)
+    Log:debug(('PCAP Emmiter: data file handler was created for %s%s'):format(PCAPEmmiter.data_dir, PCAPEmmiter.data_file))
 end
 
 local function _hex_data_to_binary(hex_data)
-    return (hex_data:gsub('..',
+    return (hex_data:gsub(_2DOTS_STR,
         function (c)
             return string.char(tonumber(c, 16))
         end)
@@ -120,6 +132,7 @@ local function _data_file_parse(pcap_data)
 
         if #value == 10 then
             value = _hex_data_to_binary(value[10]:gsub(_MAC_ADDRESS_SEP, _EMPTY_STR))
+            Log:debug('PCAP Emmiter: HEX data was read')
         else
             value = nil
         end
@@ -142,6 +155,7 @@ local function _data_file_read()
         _data_file_close()
 
         if PCAPEmmiter.data_loop then
+            Log:debug('PCAP Emmiter: data file was opened')
             _data_file_init()
 
             _data = _data_file:read(_KEY_READ_LINE)
@@ -157,7 +171,7 @@ local function _data_file_read()
     return _parse_data
 end
 
-local function _sendto(i)
+local function _sendto()
     local current_time = os.clock()
     local data = _data_file_read()
     local error_message = nil
@@ -167,11 +181,12 @@ local function _sendto(i)
     end
 
     data, error_message = _udp_socket:sendto(data, PCAPEmmiter.ip, PCAPEmmiter.port)
+    Log:debug(('PCAP Emmiter: data was sent on ip=%s, port=%s'):format(PCAPEmmiter.ip, PCAPEmmiter.port))
 
     if data and error_message == nil then
-        print(('Message send: %d'):format(i))
+        Log:debug(('PCAP Emmiter: data was sent: %x'):format(data))
     else
-        print('ERROR: ' .. error_message)
+        Log:error('PCAP Emmiter: ' .. error_message)
     end
 
     return os.clock() - current_time
@@ -182,14 +197,14 @@ local function _receive()
     local data, error_message = _udp_socket_service:receive()
 
     if data and error_message == nil then
-        print(('Message receive: %s'):format(data))
+        Log:debug(('PCAP Emmiter: data was received: %s'):format(data))
     else
-        if error_message == 'timeout' then
---            print('WARNING: Unknown network error by timeout')
-        elseif error_message == 'closed' then
-            print('ERROR: Network connection was closed')
+        if error_message == _SOCKET_STATUS.timeout then
+            Log:warn('PCAP Emmiter: unknown network error as timeout')
+        elseif error_message == _SOCKET_STATUS.closed then
+            Log:error('PCAP Emmiter: network connection was closed')
         else
-            print('ERROR: ' .. error_message)
+            Log:error('PCAP Emmiter: ' .. error_message)
         end
     end
 
@@ -204,22 +219,21 @@ function PCAPEmmiter:init()
 end
 
 function PCAPEmmiter:run()
-    local i = 0
-
     while true do
-        i = i + 1
-
-        local timeout = _sendto(i)
+        local timeout = _sendto()
 
         if timeout == nil then
-            print('Finished!')
+            Log:debug('PCAP Emmiter: finished!')
             break
         else
             timeout = self.timeout - (timeout + _receive())
         end
 
         if timeout > 0 then
+            Log:debug(('PCAP Emmiter: timeout %s'):format(timeout))
             Socket.sleep(timeout)
+        else
+            Log:warn('PCAP Emmiter: timeout less 0')
         end
     end
 end

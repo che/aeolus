@@ -9,15 +9,15 @@ DB.Driver = require('aeolus/db/driver')
 
 
 function DB:settings()
-    DB.Driver.Object.DB:settings()
+    return DB.Driver.Object.DB:settings()
 end
 
 function DB:create()
-    DB.Driver.Object.DB:create()
+    return DB.Driver.Object.DB:create()
 end
 
 function DB:delete()
-    DB.Driver.Object.DB:delete()
+    return DB.Driver.Object.DB:delete()
 end
 
 function DB:connect()
@@ -25,7 +25,7 @@ function DB:connect()
 end
 
 function DB:close()
-    DB.Driver.Object.DB:close()
+    return DB.Driver.Object.DB:close()
 end
 
 

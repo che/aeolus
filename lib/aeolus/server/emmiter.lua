@@ -2,7 +2,8 @@
 local Emmiter = {}
 
 
-local Env = require('aeolus/env')
+require('aeolus/env')
+require('aeolus/log')
 
 
 Emmiter.DEFAULT_IP = '127.0.0.1'

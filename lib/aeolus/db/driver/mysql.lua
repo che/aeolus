@@ -4,9 +4,10 @@
 local MySQL = {}
 
 
-local _MySQL = require('luasql.mysql').mysql()
+require('aeolus/env')
+require('aeolus/log')
 
-local Env = require('aeolus/env')
+local _MySQL = require('luasql.mysql').mysql()
 
 
 MySQL.DEFAULT_DB_NAME = 'aelous'

@@ -4,9 +4,10 @@
 local PostgeSQL = {}
 
 
-local _PostgeSQL = require('luasql.postgres').postgres()
+require('aeolus/env')
+require('aeolus/log')
 
-local Env = require('aeolus/env')
+local _PostgeSQL = require('luasql.postgres').postgres()
 
 
 PostgeSQL.DEFAULT_DB_NAME = 'aelous'

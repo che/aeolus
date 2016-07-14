@@ -2,6 +2,9 @@
 local Data = {}
 
 
+require('aeolus/log')
+
+
 Data.NAME = 'data_'
 
 Data.map = {}
@@ -102,36 +105,42 @@ function Data:table_create(driver_obj, mac_address, data_type)
     local table_name = self:table_name(mac_address, data_type)
     local status, error_message = driver_obj:execute(_sql_create_table(data_type, table_name))
 
-    if not nil == error_message then
+    if error_message then
+        Log:warn(('DB Data: table %s was not created: %s'):format(table_name, error_message))
         return false
     end
 
     _data_cache_add(mac_address, data_type)
+    Log:debug(('DB Data: table %s was created'):format(table_name))
 
     return true
 end
 
 function Data:insert(driver_obj, mac_address, data_type, data_table)
     local table_name = self:table_name(mac_address, data_type)
+    Log:debug(('DB Data: inserting data in table %s...'):format(table_name))
 
-    self.map[data_type]:insert(driver_obj, table_name, data_table)
+    return self.map[data_type]:insert(driver_obj, table_name, data_table)
 end
 
 function Data:delete(driver_obj, mac_address, data_type, data_table)
     local table_name = self:table_name(mac_address, data_type)
+    Log:debug(('DB Data: deleting data in table %s...'):format(table_name))
 
-    self.map[data_type]:delete(driver_obj, table_name, data_table)
+    return self.map[data_type]:delete(driver_obj, table_name, data_table)
 end
 
 function Data:table_delete(driver_obj, mac_address, data_type)
     local table_name = self:table_name(mac_address, data_type)
     local status, error_message = driver_obj:execute(_SQL_TABLE_DELETE:format(table_name))
 
-    if not nil == error_message then
+    if error_message then
+        Log:warn(('DB Data: table %s was not deleted: %s'):format(table_name, error_message))
         return false
     end
 
     _data_cache_delete(mac_address, data_type)
+    Log:debug(('DB Data: table %s was deleted'):format(table_name))
 
     return true
 end
