@@ -8,24 +8,27 @@ require('aeolus/log')
 Data.BLOCK_BYTE_KEY = tonumber('0x7e', 16)
 Data.XOR_BYTE_KEY = tonumber('0x7d', 16)
 
-Data.map = {}
-Data.map[63] = require('aeolus/data/accel')
-Data.map[51] = require('aeolus/data/aeolusinfo')
-Data.map[71] = require('aeolus/data/attitude')
-Data.map[75] = require('aeolus/data/calibinfo')
-Data.map[11] = require('aeolus/data/command')
-Data.map[72] = require('aeolus/data/compass')
-Data.map[76] = require('aeolus/data/debuginfo')
-Data.map[66] = require('aeolus/data/gps')
-Data.map[62] = require('aeolus/data/gyro')
-Data.map[81] = require('aeolus/data/log')
-Data.map[64] = require('aeolus/data/magnet')
-Data.map[61] = require('aeolus/data/pressure')
-Data.map[12] = require('aeolus/data/settime')
-Data.map[65] = require('aeolus/data/temp')
-Data.map[82] = require('aeolus/data/toast')
-Data.map[73] = require('aeolus/data/wind')
-
+local _map = {}
+_map[63] = require('aeolus/data/accel')
+_map[51] = require('aeolus/data/aeolusinfo')
+_map[71] = require('aeolus/data/attitude')
+_map[75] = require('aeolus/data/calibinfo')
+_map[11] = require('aeolus/data/command')
+_map[72] = require('aeolus/data/compass')
+_map[76] = require('aeolus/data/debuginfo')
+_map[66] = require('aeolus/data/gps')
+_map[62] = require('aeolus/data/gyro')
+_map[81] = require('aeolus/data/log')
+_map[64] = require('aeolus/data/magnet')
+_map[61] = require('aeolus/data/pressure')
+_map[12] = require('aeolus/data/settime')
+_map[65] = require('aeolus/data/temp')
+_map[82] = require('aeolus/data/toast')
+_map[73] = require('aeolus/data/wind')
+-- Inheritance
+for i, class in pairs(_map) do
+    setmetatable(class, {__index = Data})
+end
 
 local _STR_DOUBLE = 'd'
 local _STR_FLOAT = 'f'
@@ -43,7 +46,7 @@ local function _define_mac_address(id, data, read_data)
         _mac_address = _mac_address_native:gsub(_MAC_ADDRESS_SEP, _EMPTY_STR)
         Log:debug('Data: MAC Address was defined')
 
-        data[Data.map[id].NAME] = read_data
+        data[_map[id].NAME] = read_data
         Log:debug('Data: data AeolusInfo was read')
     elseif not (_mac_address_native == read_data.mac_address) then
         Log:error('Data: wrong MAC Address for current data')
@@ -71,20 +74,20 @@ end
 local function _read_by_block(byte_data)
     local id = _data_id(byte_data)
 
-    if Data.map[id] == nil then
+    if _map[id] == nil then
         Log:error(('Data: invalid data ID=%d'):format(id))
         return id, nil, 'Invalid data ID'
     else
         Log:debug(('Data: valid data ID=%d was defined'):format(id))
     end
 
-    if byte_data:byte(Data.map[id].SIZE + 5) == Data.BLOCK_BYTE_KEY then
-        if byte_data:byte(Data.map[id].SIZE + 6) == nil then
+    if byte_data:byte(_map[id].SIZE + 5) == Data.BLOCK_BYTE_KEY then
+        if byte_data:byte(_map[id].SIZE + 6) == nil then
             Log:debug('Data: last data was read in block')
             return id, byte_data, nil
         else
             Log:debug('Data: next data was read in block')
-            return id, byte_data:sub(1, Data.map[id].SIZE + 5), byte_data:sub(Data.map[id].SIZE + 6, #byte_data)
+            return id, byte_data:sub(1, _map[id].SIZE + 5), byte_data:sub(_map[id].SIZE + 6, #byte_data)
         end
     else
         Log:error('Data: invalid block size')
@@ -178,16 +181,16 @@ function Data:parse(next_data)
         if current_data == nil then
             Log:error(next_data)
         else
-            crc = _data_crc(current_data, self.map[id].SIZE)
+            crc = _data_crc(current_data, _map[id].SIZE)
 
             if crc == 0 then
                 Log:debug(('Data: valid CRC for ID=%d'):format(id))
-                current_data = _data(current_data, self.map[id].SIZE)
+                current_data = _data(current_data, _map[id].SIZE)
 
                 if id == 51 then  -- AeolusInfo
-                    _define_mac_address(id, data, self.map[id]:read(current_data, Data))
+                    _define_mac_address(id, data, _map[id]:read(current_data))
                 elseif _mac_address then
-                    data[self.map[id].NAME] = self.map[id]:read(current_data, Data)
+                    data[_map[id].NAME] = _map[id]:read(current_data)
                     Log:debug(('Data: valid data was read for ID=%d'):format(id))
                 end
             else

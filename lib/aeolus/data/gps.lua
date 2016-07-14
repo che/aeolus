@@ -7,7 +7,7 @@ GPS.SIZE = 36
 GPS.NAME = 'gps'
 
 
-function GPS:read(byte_data, data_cls)
+function GPS:read(byte_data)
     local data = {}
 
     -- Data valid
@@ -20,22 +20,22 @@ function GPS:read(byte_data, data_cls)
     data.number_of_satellites = byte_data:byte(3)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
+    data.timestamp = self:timestamp(byte_data:sub(9, 16))
 
     -- Latitude
-    data.latitude = data_cls:float(byte_data:sub(17, 20))
+    data.latitude = self:float(byte_data:sub(17, 20))
 
     -- Longitude
-    data.longitude = data_cls:float(byte_data:sub(21, 24))
+    data.longitude = self:float(byte_data:sub(21, 24))
 
     -- Altitude
-    data.altitude = data_cls:float(byte_data:sub(25, 28))
+    data.altitude = self:float(byte_data:sub(25, 28))
 
     -- Ground speed
-    data.ground_speed = data_cls:float(byte_data:sub(29, 32))
+    data.ground_speed = self:float(byte_data:sub(29, 32))
 
     -- Bearing
-    data.bearing = data_cls:float(byte_data:sub(33, 36))
+    data.bearing = self:float(byte_data:sub(33, 36))
 
     byte_data = nil
 

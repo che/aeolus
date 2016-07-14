@@ -7,41 +7,41 @@ Attitude.SIZE = 52
 Attitude.NAME = 'attitude'
 
 
-function Attitude:read(byte_data, data_cls)
+function Attitude:read(byte_data)
     local data = {}
 
     -- Data valid
     data.data_valid = byte_data:byte(1)
 
     -- Timestamp
-    data.timestamp = data_cls:timestamp(byte_data:sub(9, 16))
+    data.timestamp = self:timestamp(byte_data:sub(9, 16))
 
     -- Attitude: Roll
-    data.attitude_roll = data_cls:float(byte_data:sub(17, 20))
+    data.attitude_roll = self:float(byte_data:sub(17, 20))
 
     -- Attitude: Pitch
-    data.attitude_pitch = data_cls:float(byte_data:sub(21, 24))
+    data.attitude_pitch = self:float(byte_data:sub(21, 24))
 
     -- Attitude: Yaw
-    data.attitude_yaw = data_cls:float(byte_data:sub(25, 28))
+    data.attitude_yaw = self:float(byte_data:sub(25, 28))
 
     -- Slip ball indication
-    data.slip_ball_indication = data_cls:float(byte_data:sub(29, 32))
+    data.slip_ball_indication = self:float(byte_data:sub(29, 32))
 
     -- Turn cordinator indication
-    data.turn_coordinator_indication = data_cls:float(byte_data:sub(33, 36))
+    data.turn_coordinator_indication = self:float(byte_data:sub(33, 36))
 
     -- Attitude: Quaternion qx
-    data.attitude_quaternion_qx = data_cls:float(byte_data:sub(37, 40))
+    data.attitude_quaternion_qx = self:float(byte_data:sub(37, 40))
 
     -- Attitude: Quaternion qy
-    data.attitude_quaternion_qy = data_cls:float(byte_data:sub(41, 44))
+    data.attitude_quaternion_qy = self:float(byte_data:sub(41, 44))
 
     -- Attitude: Quaternion qz
-    data.attitude_quaternion_qz = data_cls:float(byte_data:sub(45, 48))
+    data.attitude_quaternion_qz = self:float(byte_data:sub(45, 48))
 
     -- Attitude: Quaternion qw
-    data.attitude_quaternion_qw = data_cls:float(byte_data:sub(49, 52))
+    data.attitude_quaternion_qw = self:float(byte_data:sub(49, 52))
 
     byte_data = nil
 
