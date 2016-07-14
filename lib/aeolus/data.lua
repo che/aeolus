@@ -191,7 +191,7 @@ function Data:parse(next_data)
                     Log:debug(('Data: valid data was read for ID=%d'):format(id))
                 end
             else
-                Log:warn(('Data: invalid CRC %x for ID=%d'):format(crc, id))
+                Log:warn(('Data: invalid CRC %s for ID=%d'):format(crc, id))
             end
         end
     end
