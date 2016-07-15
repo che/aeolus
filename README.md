@@ -98,7 +98,7 @@ USAGE
 -------
 
 First of all you have to receive data from AEOLUS device with the dump command (**tcpdump -i lo -w file.pcap -s0 -vv udp**).
-Resulted data are in binary file in PCAP format. Next step is to convet them into text-based HEX represention. It is done by tshark utility. This text file should be used as **AEOLUS_PCAP_EMITTER_DATA_FILE**.
+Resulted data are in binary file in PCAP format. Next step is to convet them into text-based HEX represention. It is done by **tshark** utility. This text file should be used as **AEOLUS_PCAP_EMITTER_DATA_FILE**.
 Emitter is launced by the **aeolus-server-pcap-emitter** script.
 
 The **aeolus-server-receiver** script listens specified port and address to get data from AEOLUS device.
