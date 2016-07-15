@@ -66,7 +66,7 @@ Server Receiver
 Server PCAP Emitter
 -------
 
-**AEOLUS_PCAP_EMITTER_TIMEOUT** -- Defines timeout for emmiting in seconds. By default: *0.01* (seconds).
+**AEOLUS_PCAP_EMITTER_TIMEOUT** -- Defines timeout for emmiting in seconds. By default: *0.01*.
 
 **AEOLUS_PCAP_EMITTER_IP** -- Defines IP address for emmiting. By default: *127.0.0.1*.
 
