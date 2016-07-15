@@ -1,94 +1,109 @@
 AEOLUS SENSE
 ======
 
-[AEOLUS SENSE](http://www.talosavionics.com/aeolus-sense/) is a sensor box which contains all the necessary sensors needed by A-EFIS for correct and reliable operation.
+[AEOLUS SENSE](http://www.talosavionics.com/aeolus-sense/) is a device which contains sensors needed by A-EFIS (electronic flight information system for aircrafts) for the correct and reliable operation.
 
-Writing data on external storage device!
+As distinct from A-EFIS, which shows data on mobile device, current project collects data from several AEOLUS devices and writes them on the external storage for further analysis!
 
 
 Environment
 -------
 
-On this moment correctly works on GNU/Linux, OpenWRT for Lua 5.1, LuaJIT 2.1 and more.
+On this moment system correctly works on GNU/Linux, either Intel-based or ARM-based, and uses Lua 5.1 or higher, and can use LuaJIT 2.0 or  higher.  OpenWRT firmwares are also supported.
 
 
 Configuration
 -------
 
-**The entire project configuration only through environment variables!**
+**Whole project configuration is done through environment variables!**
 
-For each module exists its own environment variables if needed.
+Project contains several modules. If module needs configuraton, it has its own environment variables. Folliwing part of the document describes configuration variables, grouped along mudules their functionality.
 
 
 Logging
 -------
 
-**AEOLUS_LOG_LEVEL** -- You can only level define: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
+**AEOLUS_LOG_LEVEL** -- You can define one of following log levels: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
 
-**AEOLUS_LOG_FILE** -- Define file name for logging. By default: *aeolus.log*.
+**AEOLUS_LOG_FILE** -- Defines file name for logging. By default: *aeolus.log*.
 
-**AEOLUS_LOG_DIR** -- Define path for log file. By default: *<project_directory>/var*.
+**AEOLUS_LOG_DIR** -- Defines path for log file. By default: *project_directory/var*.
 
 
 Database
 -------
 
-**AEOLUS_DB_DRIVER** -- Define driver name. You can only define: *sqlite*, *mysql*, *postgresql*. By default: *sqlite*.
+**AEOLUS_DB_DRIVER** -- Defines driver name. You can define one of the following: *sqlite*, *mysql*, *postgresql*. By default: *sqlite*.
 
 
  * **SQLite**
 
-    **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
+    **AEOLUS_DB_NAME** -- Defines database name. By default: *aeolus*.
 
-    **AEOLUS_DB_DIR** -- Define path to databse. By default: *<project_directory>/var*.
+    **AEOLUS_DB_DIR** -- Defines path to databse. By default: *<project_directory>/var*.
 
  * **MySQL**
 
-    **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
+    **AEOLUS_DB_NAME** -- Defines database name. By default: *aeolus*.
 
  * **PostgreSQL**
 
-    **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
+    **AEOLUS_DB_NAME** -- Defines database name. By default: *aeolus*.
 
 
 Server Receiver
 -------
 
-**AEOLUS_RECEIVER_TIMEOUT** -- Define timeout for receiving. By default: *0.01* (seconds).
+**AEOLUS_RECEIVER_TIMEOUT** -- Defines timeout for receiving in seconds. By default: *0.01*.
 
-**AEOLUS_RECEIVER_IP** -- Define IP Address for receiving. By default: *127.0.0.1*.
+**AEOLUS_RECEIVER_IP** -- Defines IP address for receiving. By default: *127.0.0.1*.
 
-**AEOLUS_RECEIVER_PORT** -- Define port for receiving. By default: *5001*.
+**AEOLUS_RECEIVER_PORT** -- Defines port for receiving. By default: *5001*.
 
-**AEOLUS_RECEIVER_SERVICE_PORT** -- Define service port for operation of Aeolus device. By default: *5002*.
+**AEOLUS_RECEIVER_SERVICE_PORT** -- Defines service port for operation of Aeolus device. By default: *5002*.
 
 
-Server PCAP Emmiter
+Server PCAP Emitter
 -------
 
-**AEOLUS_PCAP_EMMITER_TIMEOUT** -- Define timeout for receiving. By default: *0.01* (seconds).
+**AEOLUS_PCAP_EMITTER_TIMEOUT** -- Defines timeout for emmiting in seconds. By default: *0.01* (seconds).
 
-**AEOLUS_PCAP_EMMITER_IP** -- Define IP Address for receiving. By default: *127.0.0.1*.
+**AEOLUS_PCAP_EMITTER_IP** -- Defines IP address for emmiting. By default: *127.0.0.1*.
 
-**AEOLUS_PCAP_EMMITER_PORT** -- Define port for receiving. By default: *5001*.
+**AEOLUS_PCAP_EMITTER_PORT** -- Defines port for emmiting. By default: *5001*.
 
-**AEOLUS_PCAP_EMMITER_SERVICE_PORT** -- Define service port for operation of Aeolus device. By default: *5002*.
+**AEOLUS_PCAP_EMITTER_SERVICE_PORT** -- Defines service port for operation of Aeolus device. By default: *5002*.
 
-**AEOLUS_PCAP_EMMITER_DATA_FILE** -- Define file name with data. By default: *aeolus.pcap.data*.
+**AEOLUS_PCAP_EMITTER_DATA_FILE** -- Defines name of the file with data. By default: *aeolus.pcap.data*.
 
-**AEOLUS_PCAP_EMMITER_DATA_DIR** -- Define path to data file. By default: *<project_directory>/var*.
+**AEOLUS_PCAP_EMITTER_DATA_DIR** -- Defines path to file with data in text format. By default: *project_directory/var*.
 
-**AEOLUS_PCAP_EMMITER_DATA_LOOP** -- By default: *false*.
+**AEOLUS_PCAP_EMITTER_DATA_LOOP** -- When false, server imitator stops operation after emitter data file ends. When true, this file is read in the infinite cycle. By default: *false*.
 
 
-Server Emmiter
+Server Transmitter
 -------
 
-**AEOLUS_EMMITER_IP** -- Define IP Address for receiving. By default: *127.0.0.1*.
+Has REST API interface.
 
-**AEOLUS_EMMITER_PORT** -- Define port for emmiting. By default: *5000*.
+
+**AEOLUS_TRANSMITTER_IP** -- Define IP Address for transmitting. By default: *127.0.0.1*.
+
+**AEOLUS_TRANSMITTER_PORT** -- Define port for transmitting. By default: *5000*.
 
 In progress.
+
+
+USAGE
+-------
+
+First of all you have to receive data from AEOLUS device with the dump command.
+Resulted data are in binary file in PCAP format. Next step is to convet them into text-based HEX represention. It is done by tshark utility. This text file should be used as AEOLUS_PCAP_EMMITER_DATA_FILE.
+Emitter is launced by the **aeolus-server-pcap-emitter* script.
+
+The **aeolus-server-receiver** script listens specified port and address to get data from AEOLUS device.
+The **aeolus-server-pcap-emitter** script emulates AEOLUS device based on the file saved with **aeolus-server-receiver** script.
+**aeolus-server-transmitter** script runs server to get data from different AEOLUS devices with use of REST API and thus allows remote access to data previously read from sensors with **aeolus-server-receiver**.
 
 
 License
