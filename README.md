@@ -18,11 +18,11 @@ For each module exists its own environment variables if needed.
 Logging
 -------
 
-**AEOLUS_LOG_LEVEL** -- You can only define: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
+**AEOLUS_LOG_LEVEL** -- You can only level define: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
 
-**AEOLUS_LOG_FILE** -- By default: *aeolus.log*.
+**AEOLUS_LOG_FILE** -- Define file name for logging. By default: *aeolus.log*.
 
-**AEOLUS_LOG_DIR** -- By default: *<project_directory>/var*.
+**AEOLUS_LOG_DIR** -- Define path for log file. By default: *<project_directory>/var*.
 
 
 Database
@@ -31,17 +31,17 @@ Database
 **AEOLUS_DB_DRIVER** -- Define driver name. You can only define: *sqlite*, *mysql*, *postgresql*. By default: *sqlite*.
 
 
-## SQLite
+### SQLite
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
 **AEOLUS_DB_DIR** -- Define path to databse. By default: *<project_directory>/var*.
 
-## MySQL
+### MySQL
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
-## PostgreSQL
+### PostgreSQL
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
@@ -83,12 +83,6 @@ Server Emmiter
 
 **AEOLUS_EMMITER_PORT** -- Define port for emmiting. By default: *5000*.
 
-
-In progress.
-
-
-Testing
--------
 
 In progress.
 
