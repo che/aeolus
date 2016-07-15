@@ -10,7 +10,7 @@ require('aeolus/log')
 local _SQLite = require('luasql.sqlite3').sqlite3()
 
 
-SQLite.DEFAULT_DB_NAME = 'aelous'
+SQLite.DEFAULT_DB_NAME = 'aeolus'
 SQLite.DB_NAME = Env:get('AEOLUS_DB_NAME') or SQLite.DEFAULT_DB_NAME
 
 SQLite.DEFAULT_DB_DIR = Env.VAR_DIR

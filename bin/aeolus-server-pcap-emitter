@@ -6,4 +6,4 @@ AELOUS_BIN_DIR="${AELOUS_BIN_DIR:=$(realpath "$(readlink -f "$(dirname "$0")")")
 
 
 cd "${AELOUS_BIN_DIR}../lib"
-"$LUA_BIN_FILE" "${AELOUS_BIN_DIR}aeolus-server-receiver.lua"
+"$LUA_BIN_FILE" "${AELOUS_BIN_DIR}aeolus-server-pcap-emitter.lua"

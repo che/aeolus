@@ -10,7 +10,7 @@ require('aeolus/log')
 local _MySQL = require('luasql.mysql').mysql()
 
 
-MySQL.DEFAULT_DB_NAME = 'aelous'
+MySQL.DEFAULT_DB_NAME = 'aeolus'
 MySQL.DB_NAME = Env:get('AEOLUS_DB_NAME') or MySQL.DEFAULT_DB_NAME
 
 local _connection = nil

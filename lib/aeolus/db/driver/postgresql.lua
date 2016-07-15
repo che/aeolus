@@ -10,7 +10,7 @@ require('aeolus/log')
 local _PostgeSQL = require('luasql.postgres').postgres()
 
 
-PostgeSQL.DEFAULT_DB_NAME = 'aelous'
+PostgeSQL.DEFAULT_DB_NAME = 'aeolus'
 PostgeSQL.DB_NAME = Env:get('AEOLUS_DB_NAME') or PostgeSQL.DEFAULT_DB_NAME
 
 local _connection = nil
