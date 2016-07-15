@@ -40,7 +40,7 @@ Database
 
     **AEOLUS_DB_NAME** -- Defines database name. By default: *aeolus*.
 
-    **AEOLUS_DB_DIR** -- Defines path to databse. By default: *<project_directory>/var*.
+    **AEOLUS_DB_DIR** -- Defines path to databse. By default: *project_directory/var*.
 
  * **MySQL**
 
