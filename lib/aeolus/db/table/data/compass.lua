@@ -60,31 +60,31 @@ function Compass:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function Compass:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.calibration_status,
-                                                data_table.has_value,
-                                                data_table.calibration_per,
-                                                data_table.calibration_per_remaining_time,
-                                                data_table.timestamp,
-                                                data_table.compass_heading,
-                                                data_table.soft_calibration_params_1,
-                                                data_table.soft_calibration_params_2,
-                                                data_table.soft_calibration_params_3,
-                                                data_table.hard_iron_calibration_1,
-                                                data_table.hard_iron_calibration_2,
-                                                data_table.hard_iron_calibration_3,
-                                                data_table.hard_iron_calibration_4,
-                                                data_table.hard_iron_calibration_5,
-                                                data_table.hard_iron_calibration_6,
-                                                data_table.hard_iron_calibration_7,
-                                                data_table.hard_iron_calibration_8,
-                                                data_table.hard_iron_calibration_9,
-                                                os.time()))
+function Compass:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.calibration_status,
+                                                    data_table.has_value,
+                                                    data_table.calibration_per,
+                                                    data_table.calibration_per_remaining_time,
+                                                    data_table.timestamp,
+                                                    data_table.compass_heading,
+                                                    data_table.soft_calibration_params_1,
+                                                    data_table.soft_calibration_params_2,
+                                                    data_table.soft_calibration_params_3,
+                                                    data_table.hard_iron_calibration_1,
+                                                    data_table.hard_iron_calibration_2,
+                                                    data_table.hard_iron_calibration_3,
+                                                    data_table.hard_iron_calibration_4,
+                                                    data_table.hard_iron_calibration_5,
+                                                    data_table.hard_iron_calibration_6,
+                                                    data_table.hard_iron_calibration_7,
+                                                    data_table.hard_iron_calibration_8,
+                                                    data_table.hard_iron_calibration_9,
+                                                    os.time()))
 end
 
-function Compass:delete(driver_obj, table_name, data_table)
+function Compass:delete(table_name, data_table)
     return nil
 end
 

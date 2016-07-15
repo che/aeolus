@@ -19,11 +19,11 @@ function SetTime:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function SetTime:insert(driver_obj, table_name, data_table)
+function SetTime:insert(table_name, data_table)
     return nil
 end
 
-function SetTime:delete(driver_obj, table_name, data_table)
+function SetTime:delete(table_name, data_table)
     return nil
 end
 

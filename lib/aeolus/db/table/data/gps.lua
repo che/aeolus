@@ -39,21 +39,21 @@ function GPS:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function GPS:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.has_fix,
-                                                data_table.number_of_satellites,
-                                                data_table.timestamp,
-                                                data_table.latitude,
-                                                data_table.longitude,
-                                                data_table.altitude,
-                                                data_table.ground_speed,
-                                                data_table.bearing,
-                                                os.time()))
+function GPS:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.has_fix,
+                                                    data_table.number_of_satellites,
+                                                    data_table.timestamp,
+                                                    data_table.latitude,
+                                                    data_table.longitude,
+                                                    data_table.altitude,
+                                                    data_table.ground_speed,
+                                                    data_table.bearing,
+                                                    os.time()))
 end
 
-function GPS:delete(driver_obj, table_name, data_table)
+function GPS:delete(table_name, data_table)
     return nil
 end
 

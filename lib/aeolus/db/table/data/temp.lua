@@ -26,15 +26,15 @@ function Temp:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function Temp:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.timestamp,
-                                                data_table.temperature,
-                                                os.time()))
+function Temp:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.timestamp,
+                                                    data_table.temperature,
+                                                    os.time()))
 end
 
-function Temp:delete(driver_obj, table_name, data_table)
+function Temp:delete(table_name, data_table)
     return nil
 end
 

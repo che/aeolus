@@ -24,6 +24,10 @@ _map['settime'] = require('aeolus/db/table/data/settime')
 _map['temp'] = require('aeolus/db/table/data/temp')
 _map['toast'] = require('aeolus/db/table/data/toast')
 _map['wind'] = require('aeolus/db/table/data/wind')
+-- Inheritance
+for _, class in pairs(_map) do
+    setmetatable(class, {__index = Data})
+end
 
 
 local _data_cache = {}
@@ -101,9 +105,9 @@ function Data:table_exists(mac_address, data_type)
     return false
 end
 
-function Data:table_create(driver_obj, mac_address, data_type)
+function Data:table_create(mac_address, data_type)
     local table_name = self:table_name(mac_address, data_type)
-    local status, error_message = driver_obj:execute(_sql_create_table(data_type, table_name))
+    local status, error_message = self:driver():execute(_sql_create_table(data_type, table_name))
 
     if error_message then
         Log:warn(('DB Data: table %s was not created: %s'):format(table_name, error_message))
@@ -116,23 +120,23 @@ function Data:table_create(driver_obj, mac_address, data_type)
     return true
 end
 
-function Data:insert(driver_obj, mac_address, data_type, data_table)
+function Data:insert(mac_address, data_type, data_table)
     local table_name = self:table_name(mac_address, data_type)
     Log:debug(('DB Data: inserting data in table %s...'):format(table_name))
 
-    return _map[data_type]:insert(driver_obj, table_name, data_table)
+    return _map[data_type]:insert(table_name, data_table)
 end
 
-function Data:delete(driver_obj, mac_address, data_type, data_table)
+function Data:delete(mac_address, data_type, data_table)
     local table_name = self:table_name(mac_address, data_type)
     Log:debug(('DB Data: deleting data in table %s...'):format(table_name))
 
-    return _map[data_type]:delete(driver_obj, table_name, data_table)
+    return _map[data_type]:delete(table_name, data_table)
 end
 
-function Data:table_delete(driver_obj, mac_address, data_type)
+function Data:table_delete(mac_address, data_type)
     local table_name = self:table_name(mac_address, data_type)
-    local status, error_message = driver_obj:execute(_SQL_TABLE_DELETE:format(table_name))
+    local status, error_message = self:driver():execute(_SQL_TABLE_DELETE:format(table_name))
 
     if error_message then
         Log:warn(('DB Data: table %s was not deleted: %s'):format(table_name, error_message))

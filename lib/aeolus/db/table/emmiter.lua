@@ -55,8 +55,8 @@ function Emmiter:table_exists()
     return _table_exists
 end
 
-function Emmiter:exists_in_table(driver_obj, mac_address)
-    local cursor, error_message = driver_obj:execute(_SQL_SELECT, mac_address)
+function Emmiter:exists_in_table(mac_address)
+    local cursor, error_message = self:driver():execute(_SQL_SELECT, mac_address)
 
     if error_message or cursor == nil then
         Log:debug(('DB Emmiter: emmiter %s does not exist in table: %s'):format(mac_address, error_message))
@@ -78,8 +78,8 @@ function Emmiter:exists_in_table(driver_obj, mac_address)
     return true
 end
 
-function Emmiter:table_create(driver_obj)
-    local status, error_message = driver_obj:execute(_SQL_TABLE_CREATE)
+function Emmiter:table_create()
+    local status, error_message = self:driver():execute(_SQL_TABLE_CREATE)
 
     if error_message then
         Log:warn(('DB Emmiter: table emmiter was not created: %s'):format(error_message))
@@ -93,13 +93,13 @@ function Emmiter:table_create(driver_obj)
     return true
 end
 
-function Emmiter:insert(driver_obj, data_table)
-    if not self:exists_in_table(driver_obj, data_table.mac_address) then
-        local status, error_message = driver_obj:execute(_SQL_INSERT:format(
-                                                        data_table.mac_address,
-                                                        data_table.ip,
-                                                        data_table.port,
-                                                        os.time()))
+function Emmiter:insert(data_table)
+    if not self:exists_in_table(data_table.mac_address) then
+        local status, error_message = self:driver():execute(_SQL_INSERT:format(
+                                                            data_table.mac_address,
+                                                            data_table.ip,
+                                                            data_table.port,
+                                                            os.time()))
 
         if error_message then
             Log:warn(('DB Emmiter: emmiter %s was not inserted: %s'):format(data_table.mac_address, error_message))
@@ -113,9 +113,9 @@ function Emmiter:insert(driver_obj, data_table)
     return true
 end
 
-function Emmiter:delete(driver_obj, mac_address)
-    if self:exists_in_table(driver_obj, mac_address) then
-        local status, error_message = driver_obj:execute(_SQL_DELETE, mac_address)
+function Emmiter:delete(mac_address)
+    if self:exists_in_table(mac_address) then
+        local status, error_message = self:driver():execute(_SQL_DELETE, mac_address)
 
         if error_message then
             Log:warn(('DB Emmiter: emmiter %s was not deleted: %s'):format(mac_address, error_message))
@@ -134,8 +134,8 @@ function Emmiter:delete(driver_obj, mac_address)
     return true
 end
 
-function Emmiter:table_delete(driver_obj)
-    local status, error_message = driver_obj:execute(_SQL_TABLE_DELETE)
+function Emmiter:table_delete()
+    local status, error_message = self:driver():execute(_SQL_TABLE_DELETE)
 
     if error_message then
         Log:warn(('DB Emmiter: table emmiter was not deleted: %s'):format(error_message))

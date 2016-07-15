@@ -29,16 +29,16 @@ function AeolusInfo:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function AeolusInfo:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.model_id,
-                                                data_table.model_name,
-                                                data_table.firmware_version,
-                                                data_table.mac_address,
-                                                os.time()))
+function AeolusInfo:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.model_id,
+                                                    data_table.model_name,
+                                                    data_table.firmware_version,
+                                                    data_table.mac_address,
+                                                    os.time()))
 end
 
-function AeolusInfo:delete(driver_obj, table_name, data_table)
+function AeolusInfo:delete(table_name, data_table)
     return nil
 end
 

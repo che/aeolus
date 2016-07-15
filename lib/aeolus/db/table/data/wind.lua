@@ -29,15 +29,15 @@ function Wind:sql_table_structure()
 end
 
 function Wind:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.timestamp,
-                                                data_table.wind_magnitude,
-                                                data_table.wind_direction,
-                                                os.time()))
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.timestamp,
+                                                    data_table.wind_magnitude,
+                                                    data_table.wind_direction,
+                                                    os.time()))
 end
 
-function Wind:delete(driver_obj, table_name, data_table)
+function Wind:delete(table_name, data_table)
     return nil
 end
 

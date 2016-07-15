@@ -44,23 +44,23 @@ function Attitude:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function Attitude:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.timestamp,
-                                                data_table.attitude_roll,
-                                                data_table.attitude_pitch,
-                                                data_table.attitude_yaw,
-                                                data_table.slip_ball_indication,
-                                                data_table.turn_coordinator_indication,
-                                                data_table.attitude_quaternion_qx,
-                                                data_table.attitude_quaternion_qy,
-                                                data_table.attitude_quaternion_qz,
-                                                data_table.attitude_quaternion_qw,
-                                                os.time()))
+function Attitude:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.timestamp,
+                                                    data_table.attitude_roll,
+                                                    data_table.attitude_pitch,
+                                                    data_table.attitude_yaw,
+                                                    data_table.slip_ball_indication,
+                                                    data_table.turn_coordinator_indication,
+                                                    data_table.attitude_quaternion_qx,
+                                                    data_table.attitude_quaternion_qy,
+                                                    data_table.attitude_quaternion_qz,
+                                                    data_table.attitude_quaternion_qw,
+                                                    os.time()))
 end
 
-function Attitude:delete(driver_obj, table_name, data_table)
+function Attitude:delete(table_name, data_table)
     return nil
 end
 

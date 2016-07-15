@@ -30,17 +30,17 @@ function Pressure:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function Pressure:insert(driver_obj, table_name, data_table)
-    return driver_obj:execute(_SQL_INSERT:format(table_name,
-                                                data_table.data_valid,
-                                                data_table.timestamp,
-                                                data_table.static_pressure,
-                                                data_table.pilot_pressure,
-                                                data_table.airspeed,
-                                                os.time()))
+function Pressure:insert(table_name, data_table)
+    return self:driver():execute(_SQL_INSERT:format(table_name,
+                                                    data_table.data_valid,
+                                                    data_table.timestamp,
+                                                    data_table.static_pressure,
+                                                    data_table.pilot_pressure,
+                                                    data_table.airspeed,
+                                                    os.time()))
 end
 
-function Pressure:delete(driver_obj, table_name, data_table)
+function Pressure:delete(table_name, data_table)
     return nil
 end
 

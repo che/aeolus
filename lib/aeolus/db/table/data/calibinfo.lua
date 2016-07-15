@@ -14,11 +14,11 @@ function CalibInfo:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function CalibInfo:insert(driver_obj, table_name, data_table)
+function CalibInfo:insert(table_name, data_table)
     return nil
 end
 
-function CalibInfo:delete(driver_obj, table_name, data_table)
+function CalibInfo:delete(table_name, data_table)
     return nil
 end
 
