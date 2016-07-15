@@ -31,17 +31,17 @@ Database
 **AEOLUS_DB_DRIVER** -- Define driver name. You can only define: *sqlite*, *mysql*, *postgresql*. By default: *sqlite*.
 
 
-### SQLite
+ * ### SQLite
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
 **AEOLUS_DB_DIR** -- Define path to databse. By default: *<project_directory>/var*.
 
-### MySQL
+ * ### MySQL
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
-### PostgreSQL
+ * ### PostgreSQL
 
 **AEOLUS_DB_NAME** -- Define database name. By default: *aeolus*.
 
