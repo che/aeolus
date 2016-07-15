@@ -3,6 +3,8 @@ AEOLUS SENSE
 
 [AEOLUS SENSE](http://www.talosavionics.com/aeolus-sense/) is a sensor box which contains all the necessary sensors needed by A-EFIS for correct and reliable operation.
 
+**Writing data on storage device**.
+
 
 Environment
 -------
@@ -16,6 +18,7 @@ Configuration
 **The entire project configuration only through environment variables!**
 
 For each module exists its own environment variables if needed.
+
 
 Logging
 -------
@@ -84,7 +87,6 @@ Server Emmiter
 **AEOLUS_EMMITER_IP** -- Define IP Address for receiving. By default: *127.0.0.1*.
 
 **AEOLUS_EMMITER_PORT** -- Define port for emmiting. By default: *5000*.
-
 
 In progress.
 
