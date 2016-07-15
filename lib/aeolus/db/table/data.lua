@@ -5,8 +5,6 @@ local Data = {}
 require('aeolus/log')
 
 
-Data.NAME = 'data_'
-
 local _map = {}
 _map['accel'] = require('aeolus/db/table/data/accel')
 _map['aeolusinfo'] = require('aeolus/db/table/data/aeolusinfo')
@@ -29,6 +27,7 @@ for _, class in pairs(_map) do
     setmetatable(class, {__index = Data})
 end
 
+local _name = 'data_'
 
 local _data_cache = {}
 local _DATA_CACHE_TYPE = 'table'
@@ -150,7 +149,7 @@ function Data:table_delete(mac_address, data_type)
 end
 
 function Data:table_name(mac_address, data_type)
-    return _STR_TABLE_NAME:format(self.NAME, mac_address, data_type)
+    return _STR_TABLE_NAME:format(_name, mac_address, data_type)
 end
 
 
