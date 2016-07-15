@@ -3,7 +3,7 @@ AEOLUS SENSE
 
 [AEOLUS SENSE](http://www.talosavionics.com/aeolus-sense/) is a sensor box which contains all the necessary sensors needed by A-EFIS for correct and reliable operation.
 
-**Writing data on storage device**.
+Writing data on external storage device!
 
 
 Environment
