@@ -17,7 +17,7 @@ Configuration
 
 **Whole project configuration is done through environment variables!**
 
-Project contains several modules. If module needs configuraton, it has its own environment variables. Folliwing part of the document describes configuration variables, grouped along mudules their functionality.
+Project contains several modules. If module needs configuraton, it has its own environment variables. Following part of the document describes configuration variables, grouped along mudules their functionality.
 
 
 Logging
@@ -84,7 +84,7 @@ Server PCAP Emitter
 Server Transmitter
 -------
 
-Has REST API interface.
+Server has REST API interface.
 
 
 **AEOLUS_TRANSMITTER_IP** -- Define IP Address for transmitting. By default: *127.0.0.1*.
@@ -97,7 +97,7 @@ In progress.
 USAGE
 -------
 
-First of all you have to receive data from AEOLUS device with the dump command (*tcpdump -i lo -w file.pcap -s0 -vv udp*).
+First of all you have to receive data from AEOLUS device with the dump command (**tcpdump -i lo -w file.pcap -s0 -vv udp**).
 Resulted data are in binary file in PCAP format. Next step is to convet them into text-based HEX represention. It is done by tshark utility. This text file should be used as **AEOLUS_PCAP_EMITTER_DATA_FILE**.
 Emitter is launced by the **aeolus-server-pcap-emitter** script.
 
