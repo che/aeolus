@@ -13,7 +13,7 @@ local _SQLite = require('luasql.sqlite3').sqlite3()
 SQLite.DEFAULT_DB_NAME = 'aeolus'
 SQLite.DB_NAME = Env:get('AEOLUS_DB_NAME') or SQLite.DEFAULT_DB_NAME
 
-SQLite.DEFAULT_DB_DIR = Env.VAR_DIR
+SQLite.DEFAULT_DB_DIR = Env.DIR
 SQLite.DB_DIR = Env:get('AEOLUS_DB_DIR') or SQLite.DEFAULT_DB_DIR
 if not (SQLite.DB_DIR == SQLite.DEFAULT_DB_DIR) then
     SQLite.DB_DIR = SQLite.DB_DIR .. Env.SEP

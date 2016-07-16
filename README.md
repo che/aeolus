@@ -91,10 +91,13 @@ Server has REST API interface.
 
 **AEOLUS_TRANSMITTER_PORT** -- Define port for transmitting. By default: *5000*.
 
-In progress.
+
+Installation
+-------
 
 
-USAGE
+
+Usage
 -------
 
 First of all you have to receive data from AEOLUS device with the dump command (**tcpdump -i lo -w file.pcap -s0 -vv udp**).

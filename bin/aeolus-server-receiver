@@ -1,9 +1,18 @@
 #!/bin/sh
 
-LUA_BIN_FILE="${LUA_BIN_FILE:=lua}"
+LUA_NAME="${LUA_NAME:=lua}"
+LUA_BIN_FILE="${LUA_BIN_FILE:=$(which $LUA_NAME)}"
 
-AELOUS_BIN_DIR="${AELOUS_BIN_DIR:=$(realpath "$(readlink -f "$(dirname "$0")")")}/"
+AEOLUS_DIR="${AEOLUS_DIR:=$(cd "$(dirname "$0")" && pwd -P)}/"
+AEOLUS_FILE="$(basename $0)"
+AEOLUS_LUA_FILE="${AEOLUS_FILE}.lua"
 
 
-cd "${AELOUS_BIN_DIR}../lib"
-"$LUA_BIN_FILE" "${AELOUS_BIN_DIR}aeolus-server-receiver.lua"
+if [ -f "${AELOUS_DIR}${AEOLUS_LUA_FILE}" ]
+then
+    cd "$(dirname "${AELOUS_DIR}${AEOLUS_LUA_FILE}")/../lib"
+
+    "$LUA_BIN_FILE" "${AEOLUS_DIR}${AEOLUS_LUA_FILE}"
+else
+    "$LUA_BIN_FILE" -l "$AEOLUS_FILE"
+fi
