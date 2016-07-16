@@ -1,4 +1,6 @@
 
+-- GPS readings
+
 local GPS = {}
 
 
@@ -19,6 +21,21 @@ function GPS:read(byte_data)
     -- Number of satellites
     data.number_of_satellites = byte_data:byte(3)
 
+    -- GPS timestamp hour
+    data.gps_timestamp_hour = byte_data:byte(4)
+
+    -- GPS timestamp min
+    data.gps_timestamp_min = byte_data:byte(5)
+
+    -- GPS timestamp sec
+    data.gps_timestamp_sec = byte_data:byte(6)
+
+    -- GPS timestamp msec mod
+    data.gps_timestamp_msec_mod = byte_data:byte(7)
+
+    -- GPS timestamp msec div
+    data.gps_timestamp_msec_div = byte_data:byte(8)
+
     -- Timestamp
     data.timestamp = self:timestamp(byte_data:sub(9, 16))
 
@@ -34,8 +51,8 @@ function GPS:read(byte_data)
     -- Ground speed
     data.ground_speed = self:float(byte_data:sub(29, 32))
 
-    -- Bearing
-    data.bearing = self:float(byte_data:sub(33, 36))
+    -- GPS bearing
+    data.gps_bearing = self:float(byte_data:sub(33, 36))
 
     byte_data = nil
 

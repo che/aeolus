@@ -1,4 +1,6 @@
 
+-- Attitude information
+
 local Attitude = {}
 
 

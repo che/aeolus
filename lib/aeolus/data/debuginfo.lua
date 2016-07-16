@@ -1,9 +1,11 @@
 
+-- Debug information (internal use)
+
 local DebugInfo = {}
 
 
 DebugInfo.ID = 76
-DebugInfo.SIZE = 208
+DebugInfo.SIZE = 256
 DebugInfo.NAME = 'debuginfo'
 
 

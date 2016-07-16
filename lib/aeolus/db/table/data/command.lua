@@ -6,7 +6,8 @@ Command.NAME = 'command'
 
 
 local _SQL_TABLE_STRUCTURE = [[
-        message VARCHAR(256)
+        message VARCHAR(256),
+        created_at FLOAT(8) NOT NULL
 ]]
 
 

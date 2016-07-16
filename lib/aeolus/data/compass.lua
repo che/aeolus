@@ -1,4 +1,6 @@
 
+-- Compass information
+
 local Compass = {}
 
 
@@ -43,6 +45,9 @@ function Compass:read(byte_data)
 
     -- Compass heading
     data.compass_heading = self:float(byte_data:sub(17, 20))
+
+    -- Compass true heading
+    data.compass_true_heading = self:float(byte_data:sub(21, 24))
 
     -- Soft calibration params 1
     data.soft_calibration_params_1 = self:float(byte_data:sub(33, 36))

@@ -1,4 +1,6 @@
 
+-- Log (internal use)
+
 local Log = {}
 
 

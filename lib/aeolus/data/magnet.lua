@@ -1,4 +1,6 @@
 
+-- Magnetometer readings
+
 local Magnet = {}
 
 

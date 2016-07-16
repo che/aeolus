@@ -1,4 +1,6 @@
 
+-- Wind information
+
 local Wind = {}
 
 

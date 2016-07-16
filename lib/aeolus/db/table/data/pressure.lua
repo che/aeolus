@@ -11,6 +11,8 @@ local _SQL_TABLE_STRUCTURE = [[
         static_pressure FLOAT(4) NOT NULL,
         pilot_pressure FLOAT(4) NOT NULL,
         airspeed FLOAT(4) NOT NULL,
+        qnh_current_settings FLOAT(4) NOT NULL,
+        altitude FLOAT(4) NOT NULL,
         created_at FLOAT(8) NOT NULL
 ]]
 
@@ -21,8 +23,11 @@ local _SQL_INSERT = [[
         static_pressure,
         pilot_pressure,
         airspeed,
+        qnh_current_settings,
+        altitude,
         created_at)
-        VALUES ('%d', '%.8f', '%.16f', '%.16f', '%.16f', '%.8f');
+        VALUES ('%d', '%.8f', '%.16f', '%.16f',
+                '%.16f', '%.16f', '%.16f', '%.8f');
 ]]
 
 
@@ -37,6 +42,8 @@ function Pressure:insert(table_name, data_table)
                                                     data_table.static_pressure,
                                                     data_table.pilot_pressure,
                                                     data_table.airspeed,
+                                                    data_table.qnh_current_settings,
+                                                    data_table.altitude,
                                                     os.time()))
 end
 

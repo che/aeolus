@@ -6,7 +6,8 @@ Toast.NAME = 'toast'
 
 
 local _SQL_TABLE_STRUCTURE = [[
-        null_terminated_string VARCHAR(256)
+        null_terminated_string VARCHAR(256),
+        created_at FLOAT(8) NOT NULL
 ]]
 
 

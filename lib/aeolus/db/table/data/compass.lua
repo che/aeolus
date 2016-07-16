@@ -13,6 +13,7 @@ local _SQL_TABLE_STRUCTURE = [[
         calibration_per_remaining_time VARCHAR(2) NOT NULL,
         timestamp FLOAT(8) NOT NULL,
         compass_heading FLOAT(4) NOT NULL,
+        compass_true_heading FLOAT(4) NOT NULL,
         soft_calibration_params_1 FLOAT(4) NOT NULL,
         soft_calibration_params_2 FLOAT(4) NOT NULL,
         soft_calibration_params_3 FLOAT(4) NOT NULL,
@@ -37,6 +38,7 @@ local _SQL_INSERT = [[
         calibration_per_remaining_time,
         timestamp,
         compass_heading,
+        compass_true_heading,
         soft_calibration_params_1,
         soft_calibration_params_2,
         soft_calibration_params_3,
@@ -50,7 +52,7 @@ local _SQL_INSERT = [[
         hard_iron_calibration_8,
         hard_iron_calibration_9,
         created_at)
-        VALUES ('%d','%s','%d','%s', '%s', '%.8f', '%.16f', '%.16f',
+        VALUES ('%d','%s','%d','%s', '%s', '%.8f', '%.16f', '%.16f', '%.16f',
                 '%.16f', '%.16f', '%.16f', '%.16f', '%.16f', '%.16f',
                 '%.16f', '%.16f', '%.16f', '%.16f', '%.16f', '%.8f');
 ]]
@@ -69,6 +71,7 @@ function Compass:insert(table_name, data_table)
                                                     data_table.calibration_per_remaining_time,
                                                     data_table.timestamp,
                                                     data_table.compass_heading,
+                                                    data_table.compass_true_heading,
                                                     data_table.soft_calibration_params_1,
                                                     data_table.soft_calibration_params_2,
                                                     data_table.soft_calibration_params_3,

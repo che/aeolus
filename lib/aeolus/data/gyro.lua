@@ -1,4 +1,6 @@
 
+-- Gyroscope readings
+
 local Gyro = {}
 
 

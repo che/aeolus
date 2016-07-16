@@ -1,8 +1,8 @@
 
-local SetTime = {}
+local Info = {}
 
 
-SetTime.NAME = 'settime'
+Info.NAME = 'info'
 
 
 local _SQL_TABLE_STRUCTURE = [[
@@ -11,21 +11,23 @@ local _SQL_TABLE_STRUCTURE = [[
         day VARCHAR(2) NOT NULL,
         hour VARCHAR(2) NOT NULL,
         minute VARCHAR(2) NOT NULL,
-        second VARCHAR(2) NOT NULL
+        second VARCHAR(2) NOT NULL,
+        qnh FLOAT(4) NOT NULL,
+        created_at FLOAT(8) NOT NULL
 ]]
 
 
-function SetTime:sql_table_structure()
+function Info:sql_table_structure()
     return _SQL_TABLE_STRUCTURE
 end
 
-function SetTime:insert(table_name, data_table)
+function Info:insert(table_name, data_table)
     return nil
 end
 
-function SetTime:delete(table_name, data_table)
+function Info:delete(table_name, data_table)
     return nil
 end
 
 
-return SetTime
+return Info

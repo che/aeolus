@@ -18,13 +18,15 @@ _map[72] = require('aeolus/data/compass')
 _map[76] = require('aeolus/data/debuginfo')
 _map[66] = require('aeolus/data/gps')
 _map[62] = require('aeolus/data/gyro')
+_map[12] = require('aeolus/data/info')
 _map[81] = require('aeolus/data/log')
 _map[64] = require('aeolus/data/magnet')
 _map[61] = require('aeolus/data/pressure')
-_map[12] = require('aeolus/data/settime')
+_map[74] = require('aeolus/data/te')
 _map[65] = require('aeolus/data/temp')
 _map[82] = require('aeolus/data/toast')
 _map[73] = require('aeolus/data/wind')
+_map[91] = require('aeolus/data/wp')
 -- Inheritance
 for _, class in pairs(_map) do
     setmetatable(class, {__index = Data})
@@ -177,7 +179,6 @@ function Data:parse(next_data)
 
     while next_data do
         id, current_data, next_data = _read_by_block(next_data)
-
         if current_data == nil then
             Log:error(next_data)
         else

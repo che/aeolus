@@ -1,4 +1,6 @@
 
+-- Pilot-Static pressure derived information
+
 local Pressure = {}
 
 
@@ -24,6 +26,12 @@ function Pressure:read(byte_data)
 
     -- Airspeed
     data.airspeed = self:float(byte_data:sub(25, 28))
+
+    -- QNH - current settings
+    data.qnh_current_settings = self:float(byte_data:sub(29, 32))
+
+    -- Altitude
+    data.altitude = self:float(byte_data:sub(33, 36))
 
     byte_data = nil
 

@@ -15,24 +15,24 @@ _map['compass'] = require('aeolus/db/table/data/compass')
 _map['debuginfo'] = require('aeolus/db/table/data/debuginfo')
 _map['gps'] = require('aeolus/db/table/data/gps')
 _map['gyro'] = require('aeolus/db/table/data/gyro')
+_map['info'] = require('aeolus/db/table/data/info')
 _map['log'] = require('aeolus/db/table/data/log')
 _map['magnet'] = require('aeolus/db/table/data/magnet')
 _map['pressure'] = require('aeolus/db/table/data/pressure')
-_map['settime'] = require('aeolus/db/table/data/settime')
+_map['te'] = require('aeolus/db/table/data/te')
 _map['temp'] = require('aeolus/db/table/data/temp')
 _map['toast'] = require('aeolus/db/table/data/toast')
 _map['wind'] = require('aeolus/db/table/data/wind')
+_map['wp'] = require('aeolus/db/table/data/wp')
 -- Inheritance
 for _, class in pairs(_map) do
     setmetatable(class, {__index = Data})
 end
 
-local _name = 'data_'
-
 local _data_cache = {}
 local _DATA_CACHE_TYPE = 'table'
 
-local _STR_TABLE_NAME = '%s%s_%s'
+local _STR_TABLE_NAME = 'data_%s_%s'
 
 local _SQL_TABLE_CREATE = [[
     CREATE TABLE IF NOT EXISTS %s (
@@ -149,7 +149,7 @@ function Data:table_delete(mac_address, data_type)
 end
 
 function Data:table_name(mac_address, data_type)
-    return _STR_TABLE_NAME:format(_name, mac_address, data_type)
+    return _STR_TABLE_NAME:format(mac_address, data_type)
 end
 
 

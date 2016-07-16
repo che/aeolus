@@ -1,4 +1,6 @@
 
+-- Text commands to AEOLUS (internal use)
+
 local Command = {}
 
 
