@@ -95,6 +95,15 @@ Server has REST API interface.
 Installation
 -------
 
+Locally:
+
+    git clone https://github.com/che/aeolus
+    cd ./aeolus
+    sudo luaroks make
+
+Using LuaRocks:
+
+    luaroks install aeolus-sense
 
 
 Usage

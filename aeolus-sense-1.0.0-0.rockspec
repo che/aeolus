@@ -17,6 +17,7 @@ description = {
         and writes them on the external storage for further analysis.
     ]],
     homepage = "https://github.com/che/aeolus",
+    maintainer = "pavel.chebotarev@gmail.com",
     license = "GPL-3"
 }
 
