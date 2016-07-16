@@ -23,10 +23,6 @@ local function _dir()
     end
 end
 
-local function _setdir(sub_dir)
-    return Env.CURRENT_DIR .. sub_dir .. Env.SEP
-end
-
 
 function Env:dirname(str)
     if str:match('.-/.-') then
@@ -37,24 +33,20 @@ function Env:dirname(str)
 end
 
 function Env:get(var, _type)
-    if os.getenv then
-        local value = os.getenv(var)
+    local value = os.getenv(var)
 
-        if _type == nil or _type == self.string then
-            return value
-        elseif _type == self.number then
-            return tonumber(value)
-        elseif _type == self.boolean then
-            if value == _TRUE_STR or tonumber(value) == 1 then
-                return true
-            elseif value == _FALSE_STR or tonumber(value) == 0 then
-                return false
-            else
-                return nil
-            end
+    if _type == nil or _type == self.string then
+        return value
+    elseif _type == self.number then
+        return tonumber(value)
+    elseif _type == self.boolean then
+        if value == _TRUE_STR or tonumber(value) == 1 then
+            return true
+        elseif value == _FALSE_STR or tonumber(value) == 0 then
+            return false
+        else
+            return nil
         end
-    else
-        return nil
     end
 end
 
