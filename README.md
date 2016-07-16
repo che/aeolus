@@ -99,11 +99,11 @@ Locally:
 
     git clone https://github.com/che/aeolus
     cd ./aeolus
-    sudo luaroks make
+    luarocks make
 
 Using LuaRocks:
 
-    luaroks install aeolus-sense
+    luarocks install aeolus-sense
 
 
 Usage
