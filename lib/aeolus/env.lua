@@ -16,8 +16,8 @@ local _TRUE_STR = 'true'
 
 
 local function _dir()
-    if arg then
-        return Env:dirname(arg[0]) .. '..'
+    if arg and arg[0] then
+        return Env:dirname(arg[0])
     else
         return '.'
     end
