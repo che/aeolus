@@ -5,7 +5,7 @@ local Pressure = {}
 
 
 Pressure.ID = 61
-Pressure.SIZE = 32
+Pressure.SIZE = 36
 Pressure.NAME = 'pressure'
 
 

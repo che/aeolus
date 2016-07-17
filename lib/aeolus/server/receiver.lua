@@ -77,7 +77,7 @@ local function _data_parse(byte_data)
     local data, error_or_mac = Data:parse(byte_data)
 
     if data and error_or_mac then
-        Log:debug('Receiver: device MAC Address was defined')
+        Log:debug('Receiver: device MAC address was defined')
 
         _data_parse_emmiter(error_or_mac)
 

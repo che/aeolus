@@ -5,7 +5,7 @@ local CalibInfo = {}
 
 
 CalibInfo.ID = 75
-CalibInfo.SIZE = 32
+CalibInfo.SIZE = 36
 CalibInfo.NAME = 'calibinfo'
 
 local _MAC_ADDRESS = '%x:%x:%x:%x:%x:%x'

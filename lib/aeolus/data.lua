@@ -46,12 +46,12 @@ local function _define_mac_address(id, data, read_data)
     if _mac_address == nil then
         _mac_address_native = read_data.mac_address
         _mac_address = _mac_address_native:gsub(_MAC_ADDRESS_SEP, _EMPTY_STR)
-        Log:debug('Data: MAC Address was defined')
+        Log:debug('Data: MAC address was defined')
 
         data[_map[id].NAME] = read_data
         Log:debug('Data: data AeolusInfo was read')
-    elseif not (_mac_address_native == read_data.mac_address) then
-        Log:error('Data: wrong MAC Address for current data')
+    elseif _mac_address_native ~= read_data.mac_address then
+        Log:error('Data: wrong MAC address for current data')
     end
 end
 
@@ -150,7 +150,7 @@ function Data:check(byte_data)
         local _data = {}
 
         for i = 0, #byte_data do
-            if not (byte_data:byte(i, i) == self.XOR_BYTE_KEY) then
+            if byte_data:byte(i, i) ~= self.XOR_BYTE_KEY then
                 _data[#_data + 1] = string.char(byte_data:byte(i))
             end
         end

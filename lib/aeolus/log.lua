@@ -41,7 +41,7 @@ end
 local _level = _define_level(Env:get('AEOLUS_LOG_LEVEL')) or logging.ERROR
 local _file = Env:get('AEOLUS_LOG_FILE') or 'aeolus.log'
 local _dir = Env:get('AEOLUS_LOG_DIR') or Env.DIR
-if not (_dir == Env.DIR) then
+if _dir ~= Env.DIR then
     _dir = _dir .. Env.SEP
 end
 
