@@ -24,11 +24,11 @@ _MODEL[2] = '3b'
 function AeolusInfo:read(byte_data)
     local data = {}
 
-    -- Model ID
-    data.model_id = byte_data:byte(1)
+    -- Model name ID
+    data.model_name_id = byte_data:byte(1)
 
     -- Model name
-    data.model_name = _MODEL_NAME[data.model_id]
+    data.model_name = _MODEL_NAME[data.model_name_id]
 
     -- Firmware version
     data.firmware_version = _FIRMWARE_VERSION:format(
@@ -36,8 +36,14 @@ function AeolusInfo:read(byte_data)
         byte_data:byte(3),
         byte_data:byte(4))
 
+    -- Model ID
+    data.model_id = byte_data:byte(5)
+    if _MODEL[data.model_id] == nil then
+        data.model_id = 0
+    end
+
     -- Model
-    data.model = _MODEL[byte_data:byte(5)]
+    data.model = _MODEL[data.model_id]
 
     -- MAC address
     data.mac_address = _MAC_ADDRESS:format(

@@ -27,6 +27,18 @@ local _SQL_INSERT = [[
     INSERT INTO %s (
         data_valid,
         timestamp,
+        linear_speed_x,
+        linear_speed_y,
+        linear_speed_z,
+        linear_acceleration_x,
+        linear_acceleration_y,
+        linear_acceleration_z,
+        potential_energy,
+        kinetic_energy,
+        total_energy,
+        potential_energy_rate,
+        kinetic_energy_rate,
+        total_energy_rate,
         created_at)
         VALUES ('%d','%.8f', '%.16f', '%.16f', '%.16f',
                 '%.16f', '%.16f', '%.16f', '%.16f', '%.16f',

@@ -179,6 +179,7 @@ function Data:parse(next_data)
 
     while next_data do
         id, current_data, next_data = _read_by_block(next_data)
+
         if current_data == nil then
             Log:error(next_data)
         else

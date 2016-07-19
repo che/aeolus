@@ -54,7 +54,6 @@ function TE:read(byte_data)
     -- Total energy rate
     data.total_energy_rate = self:float(byte_data:sub(61, 64))
 
-
     byte_data = nil
 
     return data
