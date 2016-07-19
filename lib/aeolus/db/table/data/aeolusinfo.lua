@@ -10,7 +10,7 @@ local _SQL_TABLE_STRUCTURE = [[
         model_name VARCHAR(12) NOT NULL,
         firmware_version VARCHAR(8) NOT NULL,
         model_id INTEGER(1) NOT NULL,
-        model VARCHAR(3) NOT NULL,
+        model VARCHAR(9) NOT NULL,
         mac_address VARCHAR(17) NOT NULL,
         number_of_reboots_mod INTEGER(3) NOT NULL,
         number_of_reboots_div INTEGER(3) NOT NULL,

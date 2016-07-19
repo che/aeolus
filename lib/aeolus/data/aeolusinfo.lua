@@ -17,8 +17,9 @@ _MODEL_NAME[83] = 'AEOLUS SENSE'
 
 local _MODEL = {}
 _MODEL[0] = 'N/A'
-_MODEL[1] = '3a'
-_MODEL[2] = '3b'
+_MODEL[10] = '3A'
+_MODEL[11] = '3B'
+_MODEL[20] = 'SIMULATOR'
 
 
 function AeolusInfo:read(byte_data)
