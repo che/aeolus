@@ -25,9 +25,9 @@ Logging
 
 **AEOLUS_LOG** -- You can define of logging. By default: *false*.
 
-**AEOLUS_LOG_PRINT** -- You can define to print on stdout (*true*) or write in file (*false* also usinig *lualogging* library). By default: *true*.
-
 **AEOLUS_LOG_LEVEL** -- You can define one of following log levels: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
+
+**AEOLUS_LOG_PRINT** -- You can define to print on stdout (*true*) or write in file (*false* also usinig *lualogging* library). By default: *true*.
 
 **AEOLUS_LOG_FILE** -- Defines file name for logging. By default: *aeolus.log*.
 
