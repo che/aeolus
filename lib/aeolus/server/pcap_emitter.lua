@@ -8,21 +8,21 @@ require('aeolus/log')
 local Socket = require('socket')
 
 
-PCAPEmitter.DEFAULT_TIMEOUT = 0.01
 PCAPEmitter.DEFAULT_IP = '127.0.0.1'
 PCAPEmitter.DEFAULT_PORT = 5001
 PCAPEmitter.DEFAULT_SERVICE_PORT = 5002
 PCAPEmitter.DEFAULT_DATA_FILE = 'aeolus.pcap.data'
 PCAPEmitter.DEFAULT_DATA_DIR = Env.DIR
 PCAPEmitter.DEFAULT_DATA_LOOP = false
+PCAPEmitter.DEFAULT_TIMEOUT = 0.01
 
-PCAPEmitter.timeout = Env:get('AEOLUS_PCAP_EMITTER_TIMEOUT', Env.number) or PCAPEmitter.DEFAULT_TIMEOUT
 PCAPEmitter.ip = Env:get('AEOLUS_PCAP_EMITTER_IP') or PCAPEmitter.DEFAULT_IP
 PCAPEmitter.port = Env:get('AEOLUS_PCAP_EMITTER_PORT', Env.number) or PCAPEmitter.DEFAULT_PORT
 PCAPEmitter.service_port = Env:get('AEOLUS_PCAP_EMITTER_SERVICE_PORT', Env.number) or PCAPEmitter.DEFAULT_SERVICE_PORT
 PCAPEmitter.data_file = Env:get('AEOLUS_PCAP_EMITTER_DATA_FILE') or PCAPEmitter.DEFAULT_DATA_FILE
 PCAPEmitter.data_dir = Env:get('AEOLUS_PCAP_EMITTER_DATA_DIR') or PCAPEmitter.DEFAULT_DATA_DIR
 PCAPEmitter.data_loop = Env:get('AEOLUS_PCAP_EMITTER_DATA_LOOP', Env.boolean) or PCAPEmitter.DEFAULT_DATA_LOOP
+PCAPEmitter.timeout = Env:get('AEOLUS_PCAP_EMITTER_TIMEOUT', Env.number) or PCAPEmitter.DEFAULT_TIMEOUT
 
 
 local _HEX_FORMAT_STR = '%02x'

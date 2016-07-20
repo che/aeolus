@@ -11,17 +11,20 @@ local DB = require('aeolus/db')
 local Socket = require('socket')
 
 
-Receiver.DEFAULT_TIMEOUT = 0.01
-Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 1.5
 Receiver.DEFAULT_IP = '127.0.0.1'
 Receiver.DEFAULT_PORT = 5001
 Receiver.DEFAULT_SERVICE_PORT = 5002
+Receiver.DEFAULT_TIMEOUT = 0.01
+Receiver.DEFAULT_TIMEOUT_OFFSET = 2 / 1000
 
-Receiver.timeout = Env:get('AEOLUS_RECEIVER_TIMEOUT', Env.number) or Receiver.DEFAULT_TIMEOUT
-Receiver.timeout_multiplier = Env:get('AEOLUS_RECEIVER_TIMEOUT_MULTIPLIER', Env.number) or Receiver.DEFAULT_TIMEOUT_MULTIPLIER
 Receiver.ip = Env:get('AEOLUS_RECEIVER_IP') or Receiver.DEFAULT_IP
 Receiver.port = Env:get('AEOLUS_RECEIVER_PORT', Env.number) or Receiver.DEFAULT_PORT
 Receiver.service_port = Env:get('AEOLUS_RECEIVER_SERVICE_PORT', Env.number) or Receiver.DEFAULT_SERVICE_PORT
+Receiver.timeout = Env:get('AEOLUS_RECEIVER_TIMEOUT', Env.number) or Receiver.DEFAULT_TIMEOUT
+Receiver.timeout_offset = Env:get('AEOLUS_RECEIVER_TIMEOUT_OFFSET', Env.number) or Receiver.DEFAULT_TIMEOUT_OFFSET
+if Receiver.timeout_offset ~= Receiver.DEFAULT_TIMEOUT_OFFSET then
+    Receiver.timeout_offset = Receiver.timeout_offset / 1000
+end
 
 local _udp_socket = nil
 
@@ -169,7 +172,7 @@ function Receiver:run()
     Log:debug('Receiver was runned')
 
     while true do
-        local timeout = self.timeout - (_receive() + _sendto()) * self.timeout_multiplier
+        local timeout = self.timeout - (_receive() + _sendto() + self.timeout_offset)
 
         if timeout > 0 then
             Log:debug(('Receiver: timeout %s'):format(timeout))

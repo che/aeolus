@@ -58,19 +58,19 @@ Database
 Server Receiver
 -------
 
-**AEOLUS_RECEIVER_TIMEOUT** -- Defines timeout for receiving in seconds. By default: *0.01*.
-
 **AEOLUS_RECEIVER_IP** -- Defines IP address for receiving. By default: *127.0.0.1*.
 
 **AEOLUS_RECEIVER_PORT** -- Defines port for receiving. By default: *5001*.
 
 **AEOLUS_RECEIVER_SERVICE_PORT** -- Defines service port for operation of Aeolus device. By default: *5002*.
 
+**AEOLUS_RECEIVER_TIMEOUT** -- Defines timeout for receiving in seconds. By default: *0.01*.
+
+**AEOLUS_RECEIVER_TIMEOUT_OFFSET** -- Defines timeout offset for receiving in milliseconds. By default: *2*.
+
 
 Server PCAP Emitter
 -------
-
-**AEOLUS_PCAP_EMITTER_TIMEOUT** -- Defines timeout for emmiting in seconds. By default: *0.01*.
 
 **AEOLUS_PCAP_EMITTER_IP** -- Defines IP address for emmiting. By default: *127.0.0.1*.
 
@@ -83,6 +83,8 @@ Server PCAP Emitter
 **AEOLUS_PCAP_EMITTER_DATA_DIR** -- Defines path to file with data in text format. By default: *project_directory/var*.
 
 **AEOLUS_PCAP_EMITTER_DATA_LOOP** -- When false, server imitator stops operation after emitter data file ends. When true, this file is read in the infinite cycle. By default: *false*.
+
+**AEOLUS_PCAP_EMITTER_TIMEOUT** -- Defines timeout for emmiting in seconds. By default: *0.01*.
 
 
 Server Transmitter
