@@ -9,7 +9,7 @@ As distinct from A-EFIS, which shows data on mobile device, current project coll
 Environment
 -------
 
-On this moment system correctly works on GNU/Linux, either Intel-based or ARM-based, and uses Lua 5.1 or higher, and can use LuaJIT 2.0 or  higher.  OpenWRT firmwares are also supported.
+On this moment system correctly works on GNU/Linux, either Intel-based or ARM-based, and uses Lua 5.1.5 or higher, and can use LuaJIT 2.1 or  higher.  OpenWRT firmwares are also supported.
 
 
 Configuration
@@ -22,6 +22,10 @@ Project contains several modules. If module needs configuraton, it has its own e
 
 Logging
 -------
+
+**AEOLUS_LOG** -- You can define of logging. By default: *false*.
+
+**AEOLUS_LOG_PRINT** -- You can define to print on stdout (*true*) or write in file (*false* also usinig *lualogging* library). By default: *true*.
 
 **AEOLUS_LOG_LEVEL** -- You can define one of following log levels: *debug*, *info*, *warn*, *error*, *fatal*. By default: *error*.
 

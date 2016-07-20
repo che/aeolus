@@ -12,7 +12,7 @@ local Socket = require('socket')
 
 
 Receiver.DEFAULT_TIMEOUT = 0.01
-Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 1
+Receiver.DEFAULT_TIMEOUT_MULTIPLIER = 1.5
 Receiver.DEFAULT_IP = '127.0.0.1'
 Receiver.DEFAULT_PORT = 5001
 Receiver.DEFAULT_SERVICE_PORT = 5002

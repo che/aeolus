@@ -1,5 +1,5 @@
 package = "aeolus-sense"
-version = "1.0.0-0"
+version = "1.0.0-1"
 
 source = {
     url = "https://github.com/che/aeolus/archive/master.tar.gz"
@@ -22,8 +22,7 @@ description = {
 }
 
 dependencies = {
-    "lua >= 5.1",
-    "lualogging >= 1.3.0",
+    "lua >= 5.1.5",
     "luasocket ~> 3.0",
     "luasql-sqlite3 >= 2.3.0",
     "lpack"
