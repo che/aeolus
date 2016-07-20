@@ -31,7 +31,7 @@ Logging
 
 **AEOLUS_LOG_FILE** -- Defines file name for logging. By default: *aeolus.log*.
 
-**AEOLUS_LOG_DIR** -- Defines path for log file. By default: *project_directory/var*.
+**AEOLUS_LOG_DIR** -- Defines path for log file. By default: *.* (current directory).
 
 
 Database
@@ -44,7 +44,7 @@ Database
 
     **AEOLUS_DB_NAME** -- Defines database name. By default: *aeolus*.
 
-    **AEOLUS_DB_DIR** -- Defines path to databse. By default: *project_directory/var*.
+    **AEOLUS_DB_DIR** -- Defines path to databse. By default: *.* (current directory).
 
  * **MySQL**
 
@@ -80,7 +80,7 @@ Server PCAP Emitter
 
 **AEOLUS_PCAP_EMITTER_DATA_FILE** -- Defines name of the file with data. By default: *aeolus.pcap.data*.
 
-**AEOLUS_PCAP_EMITTER_DATA_DIR** -- Defines path to file with data in text format. By default: *project_directory/var*.
+**AEOLUS_PCAP_EMITTER_DATA_DIR** -- Defines path to file with data in text format. By default: *.* (current directory).
 
 **AEOLUS_PCAP_EMITTER_DATA_LOOP** -- When false, server imitator stops operation after emitter data file ends. When true, this file is read in the infinite cycle. By default: *false*.
 
