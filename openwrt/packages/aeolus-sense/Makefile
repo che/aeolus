@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aeolus-sense
-PKG_SOURCE_VERSION:=6d5e40c324c84d9c1453ae88e0ad5bdd0a631448
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/che/aeolus.git
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=master.tar.gz
+PKG_SOURCE_URL:=https://github.com/che/aeolus/archive
+PKG_SOURCE_SUBDIR:=aeolus-master
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,13 +21,16 @@ define Package/aeolus-sense
     SUBMENU:=Lua
     SECTION:=lang
     CATEGORY:=Languages
-    TITLE:=AEOLUS-SENSE
+    TITLE:=AEOLUS-SENSE servers
     URL:=https://github.com/che/aeolus
     MAINTAINER:=Pavel Chebotarev <pavel.chebotarev@gmail.com>
-    DEPENDS:=+lua
+    DEPENDS:=+lua +luasocket +luasql-sqlite3
 endef
 
 define Package/aeolus-sense/description
+endef
+
+define Build/Prepare
 endef
 
 define Build/Configure
