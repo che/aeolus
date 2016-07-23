@@ -24,7 +24,7 @@ define Package/aeolus-sense
     TITLE:=AEOLUS-SENSE servers
     URL:=https://github.com/che/aeolus
     MAINTAINER:=Pavel Chebotarev <pavel.chebotarev@gmail.com>
-    DEPENDS:=+lua +luasocket +luasql-sqlite3
+    DEPENDS:=+lua +luasocket +luasql-sqlite3 +luapack
 endef
 
 define Package/aeolus-sense/description
@@ -38,7 +38,6 @@ endef
 
 define Build/Compile
 endef
-
 
 define Package/aeolus-sense/install
 endef

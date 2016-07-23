@@ -12,7 +12,7 @@ PKG_SOURCE_VERSION:=6d5e40c324c84d9c1453ae88e0ad5bdd0a631448
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/che/aeolus.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -32,12 +32,14 @@ endef
 define Package/luapack/description
 endef
 
+define Build/Prepare
+endef
+
 define Build/Configure
 endef
 
 define Build/Compile
 endef
-
 
 define Package/luapack/install
 endef
